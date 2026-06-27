@@ -520,6 +520,50 @@ p  { color:var(--text-med); line-height:1.75; }
 .cta-channel a svg { width:16px; height:16px; }
 .cta-channel p { color:#bfdbfe; font-size:.83rem; margin:0; }
 
+/* ---- Email capture (Web3Forms) ---- */
+.form-consent {
+  flex-basis:100%; width:100%;
+  display:flex; gap:.5rem; align-items:flex-start;
+  font-size:.78rem; color:var(--text-light); text-align:left;
+  margin-top:.4rem; line-height:1.45; cursor:pointer;
+}
+.form-consent input {
+  flex:0 0 auto; width:18px; height:18px; min-width:18px;
+  margin-top:.15rem; cursor:pointer;
+}
+.form-note {
+  flex-basis:100%; width:100%;
+  font-size:.75rem; color:var(--text-light);
+  margin-top:.5rem; text-align:center;
+}
+.form-success {
+  flex-basis:100%; width:100%;
+  background:rgba(16,185,129,.12); color:#047857;
+  border:1px solid rgba(16,185,129,.3); border-radius:var(--r);
+  padding:1rem 1.25rem; font-size:.9rem; line-height:1.5; text-align:center;
+}
+.form-success strong { color:var(--success); }
+/* Contexte foncé (cta-banner) */
+.cta-banner .form-consent { color:#bfdbfe; }
+.cta-banner .form-note { color:#bfdbfe; }
+.cta-banner .form-success { background:rgba(255,255,255,.15); color:#fff; border-color:rgba(255,255,255,.25); }
+.cta-banner .form-success strong { color:#fff; }
+
+/* Lien VIP dans le hero */
+.hero-vip-link {
+  display:inline-block; margin-top:1rem;
+  color:var(--amber); font-size:.92rem; font-weight:600;
+  border-bottom:1px solid transparent; transition:border-color var(--t);
+}
+.hero-vip-link:hover { border-bottom-color:var(--amber); }
+
+/* Micro-note sous le CTA VIP des pages produit */
+.cta-micro-note {
+  font-size:.8rem; color:var(--text-light);
+  margin:.6rem 0 1rem; text-align:center; line-height:1.5;
+}
+.cta-micro-note strong { color:var(--amber-dark); }
+
 /* ---- Breadcrumb ---- */
 .breadcrumb {
   padding:1rem 0; font-size:.83rem; color:var(--text-light);

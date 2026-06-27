@@ -93,18 +93,26 @@
         </div>
 
         <div class="cart-checkout-note">
-          La boutique FocusLab est en cours d'ouverture officielle. Le paiement en ligne sera actif très prochainement. Inscrivez-vous pour etre notifie en avant-premiere.
+          La boutique FocusLab ouvre très prochainement. Le paiement en ligne sera actif sous peu. Rejoins la liste VIP : tu seras prévenu(e) en avant-première et tu reçois -10% sur ta première commande.
         </div>
 
-        <!-- Formulaire email liste d'attente -->
+        <!-- Formulaire email liste VIP -->
         <div class="checkout-stub">
-          <h3>Notifiez-moi</h3>
-          <p>Soyez parmi les premiers à commander dès l'ouverture de la boutique.</p>
-          <form id="email-form" novalidate>
-            <input type="email" placeholder="votre@email.fr" required
+          <h3>Rejoindre la liste VIP</h3>
+          <p>Sois parmi les premiers à commander dès l'ouverture — et garde ton -10%.</p>
+          <form action="https://api.web3forms.com/submit" method="POST" class="w3-email-form">
+            <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+            <input type="hidden" name="subject" value="FocusLab nouveau lead">
+            <input type="hidden" name="from_name" value="FocusLab">
+            <input type="checkbox" name="botcheck" style="display:none !important" tabindex="-1" autocomplete="off">
+            <input type="email" name="email" required placeholder="Ton email"
               style="width:100%;padding:.75rem 1rem;border:1px solid var(--border);border-radius:var(--r);font-family:var(--f-body);margin-bottom:.75rem;font-size:.9rem">
-            <button type="submit" class="btn btn--primary btn--full">M'inscrire sur la liste d'attente</button>
+            <button type="submit" class="btn btn--primary btn--full">Rejoindre la liste VIP</button>
+            <label class="form-consent"><input type="checkbox" name="consent" required> J'accepte de recevoir des emails de FocusLab (nouveautés, offres). Désinscription en 1 clic.</label>
+            <p class="form-note">Pas de spam. Désinscription en 1 clic.</p>
           </form>
+          <p style="margin-top:1.25rem;font-size:.83rem;color:var(--text-light)">Ou suis nos vidéos productivité :</p>
+          <a href="https://www.youtube.com/@mindsetbrutfr" target="_blank" rel="noopener" class="btn btn--secondary btn--full" style="margin-top:.5rem">▶ Chaîne Mindset Brut</a>
         </div>
       </div>
     </div>

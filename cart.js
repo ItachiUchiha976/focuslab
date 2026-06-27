@@ -150,16 +150,55 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* Email capture */
-  const emailForm = document.getElementById('email-form');
-  if (emailForm) {
-    emailForm.addEventListener('submit', e => {
+  /* Email capture — Web3Forms (AJAX) */
+  initEmailForms();
+});
+
+/* ---- Email capture forms (Web3Forms) ---- */
+function initEmailForms() {
+  document.querySelectorAll('.w3-email-form').forEach(form => {
+    const consent = form.querySelector('input[name="consent"]');
+    const btn = form.querySelector('button[type="submit"]');
+
+    /* Désactiver le bouton tant que le consentement RGPD n'est pas coché */
+    if (consent && btn) {
+      btn.disabled = !consent.checked;
+      consent.addEventListener('change', () => { btn.disabled = !consent.checked; });
+    }
+
+    form.addEventListener('submit', async e => {
       e.preventDefault();
-      const input = emailForm.querySelector('input[type="email"]');
-      if (input && input.value) {
-        showToast('Merci ! Vous serez notifié en avant-première.');
-        input.value = '';
+      if (consent && !consent.checked) {
+        showToast('Merci de cocher la case de consentement.');
+        return;
+      }
+      const original = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+      try {
+        const res = await fetch(form.action, {
+          method: 'POST',
+          headers: { 'Accept': 'application/json' },
+          body: new FormData(form)
+        });
+        const data = await res.json().catch(() => ({}));
+        if (res.ok && data.success) {
+          showFormSuccess(form);
+        } else {
+          if (btn) { btn.disabled = false; btn.textContent = original; }
+          showToast('Oups, une erreur est survenue. Réessaie dans un instant.');
+        }
+      } catch (err) {
+        if (btn) { btn.disabled = false; btn.textContent = original; }
+        showToast('Connexion impossible. Vérifie ton réseau et réessaie.');
       }
     });
-  }
-});
+  });
+}
+
+function showFormSuccess(form) {
+  const msg = document.createElement('div');
+  msg.className = 'form-success';
+  msg.innerHTML = "<strong>Merci ! Tu es sur la liste VIP.</strong><br>Tu seras prévenu(e) en avant-première de l'ouverture — et ton -10% est réservé.";
+  form.parentNode.insertBefore(msg, form);
+  form.style.display = 'none';
+}

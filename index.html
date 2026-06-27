@@ -79,11 +79,12 @@
         <h1 class="hero-title">
           Votre bureau,<br><em>laboratoire de</em><br>la productivité
         </h1>
-        <p class="hero-sub">Des accessoires bureau conçus pour vous aider à atteindre un état de concentration profonde. Moins de distractions, plus de résultats.</p>
+        <p class="hero-sub">Configurez un bureau qui vous met en mode deep work en moins de 5 minutes — et terminez vos journées avec l'énergie qu'il faut pour ce qui compte vraiment.</p>
         <div class="hero-ctas">
           <a href="produit-lampe-led.html" class="btn btn--amber btn--lg">Découvrir la Lampe 3-en-1</a>
           <a href="#produits" class="btn btn--ghost btn--lg">Voir tous les produits</a>
         </div>
+        <a href="#cta-email" class="hero-vip-link">→ Rejoindre la liste VIP — accès en avant-première &amp; -10% à l'ouverture</a>
         <div class="hero-trust">
           <div class="hero-trust-item">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
@@ -200,7 +201,7 @@
       <!-- Produit 1 : HERO -->
       <div class="product-card">
         <div class="product-card__img img-lamp">
-          <span class="product-card__badge">Best-seller</span>
+          <span class="product-card__badge">Notre choix n°1</span>
           <svg style="width:100px;height:100px" viewBox="0 0 120 120" fill="none" xmlns="http://www.w3.org/2000/svg">
             <rect x="52" y="78" width="16" height="30" rx="4" fill="rgba(255,255,255,.3)"/>
             <rect x="42" y="104" width="36" height="6" rx="3" fill="rgba(255,255,255,.2)"/>
@@ -361,10 +362,10 @@
           </div>
           <div class="stat-card">
             <span class="num">4.8★</span>
-            <span class="label">note moyenne de satisfaction client</span>
+            <span class="label">note de satisfaction que nous visons**</span>
           </div>
         </div>
-        <p style="margin-top:1rem;font-size:.7rem;color:#475569;text-align:center">* Source : études sur la technique Pomodoro (Cirillo, 2006). Les résultats individuels varient.</p>
+        <p style="margin-top:1rem;font-size:.7rem;color:#475569;text-align:center">* Source : études sur la technique Pomodoro (Cirillo, 2006). Les résultats individuels varient.<br>** Objectif de satisfaction visé — nos avis clients réels seront publiés dès les premières commandes.</p>
       </div>
     </div>
   </div>
@@ -416,18 +417,24 @@
   </div>
 </section>
 
-<!-- ===== CTA Mindset Brut ===== -->
-<section class="section">
+<!-- ===== CTA Liste VIP + Mindset Brut ===== -->
+<section class="section" id="cta-email">
   <div class="container">
     <div class="cta-banner">
-      <h2>Rejoignez la communauté des performers</h2>
-      <p>Recevez nos conseils de productivité, nos offres exclusives, et les derniers tips pour travailler mieux — directement dans votre boîte mail.</p>
-      <form class="cta-form" id="email-form" novalidate>
-        <input type="email" placeholder="votre@email.fr" required>
-        <button type="submit" class="btn btn--amber">M'inscrire</button>
+      <h2>Liste VIP — sois prévenu(e) de l'ouverture</h2>
+      <p>La boutique ouvre très prochainement. Rejoins la liste VIP : tu seras prévenu(e) en avant-première <strong style="color:#fff">et tu reçois -10% sur ta première commande</strong>.</p>
+      <form action="https://api.web3forms.com/submit" method="POST" class="w3-email-form cta-form">
+        <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+        <input type="hidden" name="subject" value="FocusLab nouveau lead">
+        <input type="hidden" name="from_name" value="FocusLab">
+        <input type="checkbox" name="botcheck" style="display:none !important" tabindex="-1" autocomplete="off">
+        <input type="email" name="email" required placeholder="Ton email">
+        <button type="submit" class="btn btn--amber">Rejoindre la liste VIP</button>
+        <label class="form-consent"><input type="checkbox" name="consent" required> J'accepte de recevoir des emails de FocusLab (nouveautés, offres). Désinscription en 1 clic.</label>
+        <p class="form-note">Pas de spam. Désinscription en 1 clic.</p>
       </form>
       <div class="cta-channel">
-        <p>Ou découvrez nos vidéos productivité sur</p>
+        <p>Ou découvre nos vidéos productivité sur</p>
         <a href="https://www.youtube.com/@mindsetbrutfr" target="_blank" rel="noopener">
           <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
           Mindset Brut

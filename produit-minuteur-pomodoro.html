@@ -127,8 +127,10 @@
             <button class="qty-btn" id="qty-plus" aria-label="Augmenter">&#43;</button>
           </div>
         </div>
+        <a href="#cta-email" class="btn btn--amber btn--lg btn--full">Rejoindre la liste VIP — accès prioritaire</a>
+        <p class="cta-micro-note">La boutique ouvre prochainement — rejoindre la liste = <strong>-10% garanti</strong> à l'ouverture.</p>
         <div class="product-ctas">
-          <button class="btn btn--amber btn--lg btn--full"
+          <button class="btn btn--secondary btn--sm"
             id="add-to-cart-btn"
             data-product-id="minuteur-pomodoro"
             data-product-name="Minuteur Flip Pomodoro FocusLab"
@@ -136,7 +138,7 @@
             data-img-class="img-timer">
             Ajouter au panier
           </button>
-          <a href="panier.html" class="btn btn--secondary btn--lg btn--full">Voir le panier</a>
+          <a href="panier.html" class="btn btn--secondary btn--sm">Voir le panier</a>
         </div>
         <div style="margin-top:1.25rem;background:var(--blue-pale);border-radius:var(--r);padding:1rem;">
           <p style="font-size:.83rem;color:var(--blue);font-weight:600;margin-bottom:.25rem">Boutique en cours d'ouverture officielle</p>
@@ -174,6 +176,33 @@
       </div>
       <p style="margin-top:1rem;font-size:.75rem;color:var(--text-light)">Les avis présentés sont illustratifs. Les vrais avis clients seront publiés dès les premières commandes.</p>
     </section>
+  </div>
+</section>
+
+<!-- ===== CTA Liste VIP + Mindset Brut ===== -->
+<section class="section" id="cta-email">
+  <div class="container">
+    <div class="cta-banner">
+      <h2>Liste VIP — accès prioritaire à l'ouverture</h2>
+      <p>Tu ne peux pas encore commander : la boutique ouvre très prochainement. Rejoins la liste VIP : tu seras prévenu(e) en avant-première <strong style="color:#fff">et tu reçois -10% sur ta première commande</strong>.</p>
+      <form action="https://api.web3forms.com/submit" method="POST" class="w3-email-form cta-form">
+        <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+        <input type="hidden" name="subject" value="FocusLab nouveau lead">
+        <input type="hidden" name="from_name" value="FocusLab">
+        <input type="checkbox" name="botcheck" style="display:none !important" tabindex="-1" autocomplete="off">
+        <input type="email" name="email" required placeholder="Ton email">
+        <button type="submit" class="btn btn--amber">Rejoindre la liste VIP</button>
+        <label class="form-consent"><input type="checkbox" name="consent" required> J'accepte de recevoir des emails de FocusLab (nouveautés, offres). Désinscription en 1 clic.</label>
+        <p class="form-note">Pas de spam. Désinscription en 1 clic.</p>
+      </form>
+      <div class="cta-channel">
+        <p>Ou découvre nos vidéos productivité sur</p>
+        <a href="https://www.youtube.com/@mindsetbrutfr" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+          Mindset Brut
+        </a>
+      </div>
+    </div>
   </div>
 </section>
 
