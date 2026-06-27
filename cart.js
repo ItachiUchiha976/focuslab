@@ -125,7 +125,7 @@ function renderCartPage() {
 }
 
 function getProductEmoji(id) {
-  const map = { 'lampe-led': '💡', 'minuteur-pomodoro': '⏱️', 'support-laptop': '💻', 'tapis-bureau': '🖱️' };
+  const map = { 'barre-lumineuse': '🖥️', 'lampe-led': '💡', 'minuteur-pomodoro': '⏱️', 'support-laptop': '💻', 'tapis-bureau': '🖱️' };
   return map[id] || '📦';
 }
 
@@ -198,7 +198,7 @@ function initEmailForms() {
 function showFormSuccess(form) {
   const msg = document.createElement('div');
   msg.className = 'form-success';
-  msg.innerHTML = "<strong>Merci ! Tu es sur la liste VIP.</strong><br>Tu seras prévenu(e) en avant-première de l'ouverture — et ton -10% est réservé.";
+  msg.innerHTML = "<strong>Merci ! Tu es sur la liste VIP.</strong><br>Tu seras prévenu(e) en avant-première de l'ouverture — et ton -15% est réservé.";
   form.parentNode.insertBefore(msg, form);
   form.style.display = 'none';
 }

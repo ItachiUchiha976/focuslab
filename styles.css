@@ -715,7 +715,10 @@ p  { color:var(--text-med); line-height:1.75; }
 }
 
 /* ---- Product image gradients ---- */
-.img-lamp    { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
-.img-timer   { background: linear-gradient(135deg, #713f12 0%, #f59e0b 100%); }
-.img-stand   { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); }
-.img-deskmat { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
+.img-lamp      { background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%); }
+.img-timer     { background: linear-gradient(135deg, #713f12 0%, #f59e0b 100%); }
+.img-stand     { background: linear-gradient(135deg, #1e293b 0%, #475569 100%); }
+.img-deskmat   { background: linear-gradient(135deg, #064e3b 0%, #10b981 100%); }
+.img-lightbar  { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%); }
+.img-posture   { background: linear-gradient(135deg, #3b0764 0%, #7c3aed 100%); }
+.img-earplugs  { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%); }
