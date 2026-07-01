@@ -202,3 +202,6 @@ function showFormSuccess(form) {
   form.parentNode.insertBefore(msg, form);
   form.style.display = 'none';
 }
+
+/* BOS — expose panier pour checkout PayPal cross-page (fix isolation cart multi-boutique, 01/07/2026) */
+try { window.getCart = getCart; window.BOS_CART_KEY = CART_KEY; } catch (e) {}
