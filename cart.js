@@ -198,7 +198,7 @@ function initEmailForms() {
 function showFormSuccess(form) {
   const msg = document.createElement('div');
   msg.className = 'form-success';
-  msg.innerHTML = "<strong>Merci ! Tu es sur la liste VIP.</strong><br>Tu seras prévenu(e) en avant-première de l'ouverture — et ton -15% est réservé.";
+  msg.innerHTML = "<strong>Merci ! Tu es inscrit(e) à la newsletter.</strong><br>Tu seras averti(e) en avant-première de nos prochains produits et offres.";
   form.parentNode.insertBefore(msg, form);
   form.style.display = 'none';
 }
