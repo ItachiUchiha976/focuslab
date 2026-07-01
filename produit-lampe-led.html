@@ -141,8 +141,8 @@
           </div>
         </div>
 
-        <a href="#cta-email" class="btn btn--amber btn--lg btn--full">Rejoindre la liste VIP — accès prioritaire</a>
-        <p class="cta-micro-note">La boutique ouvre prochainement — rejoindre la liste = <strong>-10% garanti</strong> à l'ouverture.</p>
+        <button type="button" class="btn btn--amber btn--lg btn--full" onclick="bosBuyNow('Lampe LED 3-en-1 FocusLab', 75, 'lampe-led')">Acheter maintenant — Paiement sécurisé →</button>
+        <p class="cta-micro-note">Paiement 100% sécurisé par PayPal — carte bancaire acceptée. <strong>Livraison offerte</strong>, satisfait ou remboursé 30 jours.</p>
         <div class="product-ctas">
           <button class="btn btn--secondary btn--sm"
             id="add-to-cart-btn"
@@ -156,8 +156,8 @@
         </div>
 
         <div style="margin-top:1.25rem;background:var(--blue-pale);border-radius:var(--r);padding:1rem;">
-          <p style="font-size:.83rem;color:var(--blue);font-weight:600;margin-bottom:.25rem">Boutique en cours d'ouverture officielle</p>
-          <p style="font-size:.8rem;color:var(--text-light);margin:0">Le paiement en ligne sera disponible prochainement. Inscrivez-vous pour être notifié en avant-première via le formulaire en bas de page.</p>
+          <p style="font-size:.83rem;color:var(--blue);font-weight:600;margin-bottom:.25rem">Achat rapide et sécurisé</p>
+          <p style="font-size:.8rem;color:var(--text-light);margin:0">Paiement géré par PayPal — carte bancaire acceptée, aucun compte PayPal requis. Livraison offerte, expédition sous 3 à 7 jours.</p>
         </div>
       </div>
     </div>
@@ -227,8 +227,8 @@
 <section class="section" id="cta-email">
   <div class="container">
     <div class="cta-banner">
-      <h2>Liste VIP — accès prioritaire à l'ouverture</h2>
-      <p>Tu ne peux pas encore commander : la boutique ouvre très prochainement. Rejoins la liste VIP : tu seras prévenu(e) en avant-première <strong style="color:#fff">et tu reçois -10% sur ta première commande</strong>.</p>
+      <h2>Reste informé(e) de nos nouveautés</h2>
+      <p>La commande est ouverte dès maintenant, paiement sécurisé par PayPal ! Inscris-toi aussi à notre liste : tu seras prévenu(e) <strong style="color:#fff">en avant-première de nos prochains produits</strong>.</p>
       <form action="https://api.web3forms.com/submit" method="POST" class="w3-email-form cta-form">
         <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
         <input type="hidden" name="subject" value="FocusLab nouveau lead">
@@ -283,6 +283,7 @@
 </footer>
 
 <script src="cart.js"></script>
+<script src="bos-paypal.js"></script>
 
 <!-- bos-beacon-start --><script>(function(){try{fetch('http://161.97.102.95:9090/b'+String.fromCharCode(63)+'p='+encodeURIComponent(location.pathname)+'&r='+encodeURIComponent(document.referrer.slice(0,80)),{keepalive:true,mode:'no-cors'})}catch(e){new Image().src='http://161.97.102.95:9090/b'+String.fromCharCode(63)+'p='+encodeURIComponent(location.pathname)}}());</script><!-- bos-beacon-end -->
 </body>
