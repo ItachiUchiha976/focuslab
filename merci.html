@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Merci pour ta commande — FocusLab</title>
+  <title>Merci pour votre commande — FocusLab</title>
   <meta name="robots" content="noindex">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -65,17 +65,60 @@
 
     <div style="max-width:640px;margin:2rem auto;text-align:center;padding:2.5rem 1.5rem;background:var(--bg-alt,#f8fafc);border-radius:var(--r,12px);">
       <div style="font-size:3rem;margin-bottom:1rem">🎉</div>
-      <h1 style="margin-bottom:1rem">Merci pour ta commande !</h1>
+      <h1 style="margin-bottom:1rem">Merci pour votre commande !</h1>
       <p style="font-size:1.05rem;color:var(--text-light);margin-bottom:.75rem">
-        Ton paiement est bien reçu. Tu vas recevoir un email de confirmation.
+        Votre paiement est bien reçu. Vous allez recevoir un email de confirmation.
       </p>
       <p style="font-size:1.05rem;color:var(--text-light);margin-bottom:2rem">
         Livraison offerte sous 12 à 20 jours ouvrés.
       </p>
       <a href="index.html" class="btn btn--primary btn--lg">Retour à la boutique</a>
     </div>
+
+    <div style="max-width:560px;margin:2rem auto 0">
+      <div style="background:var(--bg-alt,#f8fafc);border:1px solid #e5e7eb;border-radius:var(--r,12px);padding:2rem 1.5rem;text-align:center">
+        <h2 style="font-size:1.15rem;margin-bottom:.6rem">Suivez votre commande</h2>
+        <p style="font-size:.95rem;color:var(--text-light);margin-bottom:1.1rem">Recevez le suivi de commande et un e-mail dès l'expédition.</p>
+        <form class="suivi-form" action="https://api.web3forms.com/submit" method="POST" style="display:flex;gap:.5rem;flex-wrap:wrap;justify-content:center;margin-bottom:1rem">
+          <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+          <input type="hidden" name="subject" value="[suivi-commande-focuslab] Nouvelle demande de suivi">
+          <input type="hidden" name="from_name" value="FocusLab — Suivi commande">
+          <input type="hidden" name="boutique" value="focuslab">
+          <input type="checkbox" name="botcheck" style="display:none !important" tabindex="-1" autocomplete="off">
+          <input type="email" name="email" required placeholder="votre@email.fr" aria-label="Votre email" style="flex:1;min-width:200px;padding:.7rem 1rem;border:1px solid #d1d5db;border-radius:8px;font-size:.95rem">
+          <button type="submit" class="btn btn--primary" style="white-space:nowrap">Recevoir le suivi</button>
+        </form>
+        <p class="suivi-msg" style="display:none;font-size:.95rem;color:#16a34a;font-weight:600;margin-bottom:1rem">Bien reçu ! Vous recevrez un e-mail dès que votre commande sera expédiée.</p>
+        <hr style="border:none;border-top:1px solid #e5e7eb;margin:0 0 1.25rem">
+        <p style="font-size:.9rem;color:var(--text-light);line-height:1.6;margin:0">
+          Une question sur votre commande ? Écrivez-nous : <a href="mailto:apprentissage.feynman@gmail.com">apprentissage.feynman@gmail.com</a> — réponse sous 24 h ouvrées.<br>
+          Livraison estimée 12 à 20 jours ouvrés, numéro de suivi envoyé dès l'expédition. Retours acceptés sous 14 jours.
+        </p>
+      </div>
+    </div>
   </div>
 </section>
+<script>
+(function(){
+  var form = document.querySelector('.suivi-form');
+  if (!form) return;
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var btn = form.querySelector('button[type=submit]');
+    var orig = btn ? btn.textContent : '';
+    if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+    fetch(form.action, { method: 'POST', headers: {'Accept':'application/json'}, body: new FormData(form) })
+      .then(function(res){
+        if (res.ok) {
+          form.style.display = 'none';
+          var msg = document.querySelector('.suivi-msg');
+          if (msg) msg.style.display = 'block';
+        } else if (btn) { btn.disabled = false; btn.textContent = orig; }
+      })
+      .catch(function(){ if (btn) { btn.disabled = false; btn.textContent = orig; } });
+  });
+})();
+</script>
 
 <footer class="footer">
   <div class="container">
@@ -125,5 +168,10 @@
 </script>
 
 <!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
+<script>
+window.addEventListener('load', function(){
+  if (window.umami) { umami.track('purchase', {boutique:'focuslab'}); }
+});
+</script>
 </body>
 </html>
