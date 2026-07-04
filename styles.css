@@ -222,6 +222,7 @@ p  { color:var(--text-med); line-height:1.75; }
   padding:.35rem .9rem; border-radius:99px; margin-bottom:1.25rem;
   border:1px solid rgba(245,158,11,.3);
 }
+.hero-badge svg { width:8px; height:8px; flex-shrink:0; }
 .hero-title { color:#fff; margin-bottom:1.2rem; }
 .hero-title em { color:var(--amber); font-style:normal; }
 .hero-sub { color:#94a3b8; font-size:1.05rem; margin-bottom:2rem; max-width:480px; }

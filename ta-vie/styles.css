@@ -175,6 +175,7 @@ input[type="range"]::-moz-range-thumb {
 .stats {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; margin: 22px 0 6px;
 }
+.stats[hidden], .legend[hidden], .grid-frame[hidden] { display: none; }
 .stat {
   background: var(--bg); border: 1px solid var(--line); border-radius: var(--radius-sm);
   padding: 16px; text-align: center;
