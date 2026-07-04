@@ -281,7 +281,28 @@
   <button type="button" class="btn btn--amber btn--lg" onclick="bosBuyNow('Discipline 30 — Workbook 30 jours (PDF)', 11.00, 'discipline-30')">
     Obtenir le programme — 11 €
   </button>
+  <p class="pay-reassure">🔒 Paiement sécurisé PayPal ou carte bancaire · aucun compte requis</p>
 </div>
+
+<!-- LEAD CAPTURE -->
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-tag">Pas encore décidé(e) ?</span>
+      <h2 class="section-title">Reçois un extrait gratuit + nos conseils</h2>
+      <p class="section-sub">Laisse ton email : un extrait gratuit du programme + nos conseils pour tenir tes habitudes, sans spam.</p>
+    </div>
+    <form class="cta-form lead-capture-form" action="https://api.web3forms.com/submit" method="POST" style="max-width:480px;margin:0 auto">
+      <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+      <input type="hidden" name="subject" value="FocusLab — lead gratuit (Discipline 30)">
+      <input type="hidden" name="from_name" value="FocusLab">
+      <input type="checkbox" name="botcheck" style="display:none !important" tabindex="-1" autocomplete="off">
+      <input type="email" name="email" required placeholder="Ton email" aria-label="Ton email">
+      <button type="submit" class="btn btn--amber">Recevoir l'extrait gratuit &rarr;</button>
+      <p class="form-note">Zéro spam. Désinscription en 1 clic.</p>
+    </form>
+  </div>
+</section>
 
 <!-- FAQ -->
 <section class="section faq">
@@ -361,6 +382,36 @@
     if (btn && menu) { btn.addEventListener('click', function(){ menu.classList.add('open'); }); }
     if (close && menu) { close.addEventListener('click', function(){ menu.classList.remove('open'); }); }
     menu && menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ menu.classList.remove('open'); }); });
+  })();
+</script>
+<script>
+  // Capture email (Web3Forms, AJAX) — pas encore décidé(e)
+  (function(){
+    var form = document.querySelector('.lead-capture-form');
+    if (!form) return;
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+      var btn = form.querySelector('button[type="submit"]');
+      var orig = btn ? btn.textContent : '';
+      if (btn) { btn.disabled = true; btn.textContent = 'Envoi…'; }
+      fetch(form.action, { method: 'POST', headers: { 'Accept': 'application/json' }, body: new FormData(form) })
+        .then(function(r){ return r.json(); })
+        .then(function(json){
+          if (json && json.success) {
+            var msg = document.createElement('div');
+            msg.className = 'form-success';
+            msg.innerHTML = "<strong>Merci !</strong> Tu vas recevoir l'extrait gratuit par email très vite.";
+            form.parentNode.insertBefore(msg, form);
+            form.style.display = 'none';
+          } else {
+            throw new Error('error');
+          }
+        })
+        .catch(function(){
+          if (btn) { btn.disabled = false; btn.textContent = orig; }
+          alert('Une erreur est survenue, réessaie dans un instant.');
+        });
+    });
   })();
 </script>
 </body>
