@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discipline 30 — Le système de 30 jours pour reprendre le contrôle de ton temps | FocusLab</title>
+<meta name="description" content="Discipline 30 : un workbook de 28 pages à remplir, 30 jours, 1 action concrète par jour. Le cadre en 4 piliers, le programme semaine par semaine, les trackers d'habitudes. PDF, 11 €, téléchargement immédiat.">
+<link rel="icon" type="image/svg+xml" href="../favicon.svg">
+<link rel="canonical" href="https://focuslabboutique.fr/discipline-30/">
+<meta name="robots" content="index, follow">
+
+<meta property="og:type" content="product">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:site_name" content="FocusLab">
+<meta property="og:title" content="Discipline 30 — Le système de 30 jours pour reprendre le contrôle de ton temps">
+<meta property="og:description" content="Un workbook de 28 pages, 30 jours, 1 action concrète par jour. Le cadre en 4 piliers + trackers d'habitudes. PDF, 11 €, téléchargement immédiat.">
+<meta property="og:url" content="https://focuslabboutique.fr/discipline-30/">
+<meta property="og:image" content="https://focuslabboutique.fr/discipline-30/img/preview-cover.png">
+<meta property="og:image:width" content="1000">
+<meta property="og:image:height" content="1414">
+
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Discipline 30 — Le système de 30 jours pour reprendre le contrôle de ton temps">
+<meta name="twitter:description" content="Un workbook de 28 pages, 30 jours, 1 action concrète par jour. PDF, 11 €, téléchargement immédiat.">
+<meta name="twitter:image" content="https://focuslabboutique.fr/discipline-30/img/preview-cover.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="../styles.css">
+<style>
+  /* ---- Discipline 30 — additions scopées à cette page (réutilise les variables de styles.css) ---- */
+  .hero-cover-frame { position:relative; display:inline-block; max-width:320px; width:100%; margin:0 auto; }
+  .hero-cover-frame img { width:100%; border-radius:16px; box-shadow:0 30px 80px rgba(0,0,0,.5), 0 0 60px rgba(37,99,235,.3); border:1px solid rgba(255,255,255,.1); display:block; }
+  .cover-tag { position:absolute; top:-14px; right:-16px; background:var(--amber); color:#1e293b; font-weight:800; font-size:.85rem; padding:.45rem .95rem; border-radius:99px; transform:rotate(4deg); box-shadow:var(--shadow2); }
+
+  .price-row { display:flex; align-items:baseline; gap:.8rem; margin:1.4rem 0 1.1rem; flex-wrap:wrap; }
+  .price-big { font-family:var(--f-title); font-size:2.6rem; font-weight:800; color:var(--amber); line-height:1; }
+  .price-note { font-size:.88rem; color:#94a3b8; }
+  .pay-reassure { margin-top:.9rem; font-size:.85rem; color:#94a3b8; }
+
+  .trust-bar { background:var(--bg-light); border-bottom:1px solid var(--border); padding:.9rem 1.25rem; }
+  .trust-inner { max-width:var(--max-w); margin:0 auto; display:flex; justify-content:center; gap:1.75rem; flex-wrap:wrap; }
+  .trust-item { display:flex; align-items:center; gap:.5rem; font-size:.84rem; font-weight:600; color:var(--text-med); }
+
+  .preview-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:1.2rem; margin-top:1.5rem; }
+  .preview-item { background:var(--white); border-radius:var(--r2); overflow:hidden; box-shadow:var(--shadow); border:1px solid var(--border); }
+  .preview-item img { width:100%; height:auto; display:block; }
+  .preview-item span { display:block; text-align:center; font-size:.82rem; font-weight:600; color:var(--text-light); padding:.7rem; }
+
+  .week-list { display:flex; flex-direction:column; gap:1rem; margin-top:1.75rem; }
+  .week-row { display:flex; gap:1.25rem; align-items:flex-start; background:var(--white); border:1px solid var(--border); border-radius:var(--r); padding:1.25rem 1.5rem; }
+  .week-num { font-family:var(--f-title); font-weight:800; font-size:1.5rem; color:var(--blue); flex-shrink:0; width:88px; line-height:1.2; }
+  .week-num small { display:block; font-family:var(--f-body); font-weight:600; font-size:.72rem; color:var(--text-light); text-transform:uppercase; letter-spacing:.04em; }
+  .week-row h4 { margin-bottom:.3rem; }
+  .week-row p { font-size:.9rem; margin:0; }
+
+  .bonus-sources { margin-top:1.5rem; background:var(--bg-light); border:1px dashed var(--border); border-radius:var(--r); padding:1.1rem 1.3rem; font-size:.87rem; color:var(--text-med); }
+  .bonus-sources strong { color:var(--blue); }
+
+  .cta-band-dark { background:var(--dark); text-align:center; padding:3.5rem 1.5rem; }
+  .cta-band-dark h2 { color:#fff; margin-bottom:.6rem; }
+  .cta-band-dark p { color:#94a3b8; max-width:540px; margin:0 auto 1.6rem; }
+  .cta-band-dark .price-big { color:var(--amber); }
+  .cta-band-dark .price-note { color:#94a3b8; }
+  .cta-band-dark .price-row { justify-content:center; }
+
+  .faq details { border:1px solid var(--border); border-radius:var(--r); padding:1rem 1.25rem; margin-bottom:.8rem; background:var(--white); }
+  .faq summary { font-weight:700; cursor:pointer; font-size:1rem; list-style:none; color:var(--text); }
+  .faq summary::-webkit-details-marker { display:none; }
+  .faq summary::after { content:"+"; float:right; color:var(--blue); font-weight:900; }
+  .faq details[open] summary::after { content:"–"; }
+  .faq details p { color:var(--text-light); font-size:.93rem; margin-top:.7rem; }
+
+  .softlink-box { background:var(--blue-pale); border-radius:var(--r); padding:1.1rem 1.3rem; margin-top:1.5rem; font-size:.9rem; color:var(--text-med); }
+  .softlink-box a { color:var(--blue); font-weight:700; }
+
+  @media (max-width: 1024px) { .hero-grid { grid-template-columns:1fr; } .hero-visual { order:-1; margin-bottom:1rem; } }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  📄 Format PDF &nbsp;&middot;&nbsp; Téléchargement immédiat après paiement &nbsp;&middot;&nbsp; Satisfait ou remboursé sous 14 jours
+</div>
+
+<header class="header">
+  <div class="container">
+    <div class="header__inner">
+      <a href="../index.html" class="logo">Focus<em>Lab</em></a>
+      <nav aria-label="Navigation principale">
+        <ul class="nav-list">
+          <li><a href="../index.html" class="nav-link">Accueil</a></li>
+          <li><a href="index.html" class="nav-link active">Discipline 30</a></li>
+          <li><a href="../produit-lampe-led.html" class="nav-link">Boutique</a></li>
+          <li><a href="../a-propos.html" class="nav-link">À propos</a></li>
+        </ul>
+      </nav>
+      <div class="header-actions">
+        <a href="#acheter" class="btn btn--amber btn--sm">Obtenir — 11 €</a>
+        <button class="hamburger" aria-label="Menu" aria-expanded="false">
+          <span></span><span></span><span></span>
+        </button>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="mobile-menu" aria-label="Menu mobile">
+  <button class="mobile-menu__close" aria-label="Fermer">&#x2715;</button>
+  <a href="../index.html">Accueil</a>
+  <a href="index.html">Discipline 30 (PDF)</a>
+  <a href="../produit-lampe-led.html">Boutique FocusLab</a>
+  <a href="../a-propos.html">À propos</a>
+  <a href="../ta-vie/">Ta Vie en Semaines (outil gratuit)</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="container">
+    <div class="hero-grid">
+      <div class="hero-content">
+        <span class="hero-badge">📘 Mindset Brut × FocusLab · Workbook</span>
+        <h1 class="hero-title">Discipline <em>30</em></h1>
+        <p class="hero-sub">Tu as environ 4 000 semaines à vivre. Le problème n'est jamais un manque de volonté — c'est un manque de système. Discipline 30 te donne ce système : 30 jours, une page par jour, une action concrète, une case à cocher.</p>
+
+        <div id="acheter" class="price-row">
+          <span class="price-big">11 €</span>
+          <span class="price-note">PDF · 28 pages · téléchargement immédiat</span>
+        </div>
+        <button type="button" class="btn btn--amber btn--lg btn--full" onclick="bosBuyNow('Discipline 30 — Workbook 30 jours (PDF)', 11.00, 'discipline-30')">
+          Obtenir le programme — 11 €
+        </button>
+        <p class="pay-reassure">🔒 Paiement sécurisé PayPal ou carte bancaire · aucun compte requis</p>
+
+        <div class="hero-trust">
+          <div class="hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Reçu tout de suite</div>
+          <div class="hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> À imprimer et remplir au stylo</div>
+          <div class="hero-trust-item"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> Sources vérifiées</div>
+        </div>
+      </div>
+      <div class="hero-visual">
+        <div class="hero-cover-frame">
+          <span class="cover-tag">28 pages</span>
+          <img src="img/preview-cover.png" alt="Couverture du workbook Discipline 30 — Mindset Brut" width="1000" height="1414" loading="eager">
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-inner">
+    <div class="trust-item">⚡ Téléchargement immédiat</div>
+    <div class="trust-item">📄 PDF imprimable, 28 pages</div>
+    <div class="trust-item">✅ Basé sur des sources vérifiées (Clear, Duhigg, Burkeman, Lally et al. 2010)</div>
+    <div class="trust-item">↩️ Satisfait ou remboursé 14 jours</div>
+  </div>
+</div>
+
+<!-- CE QUE TU REÇOIS -->
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-tag">Ce que tu reçois</span>
+      <h2 class="section-title">Un système en 4 piliers, pas un discours de motivation</h2>
+      <p class="section-sub">« La discipline n'est pas une question de volonté. C'est une question de système. Tu vas en construire un. » Le workbook applique 4 piliers à chaque page : les systèmes battent la volonté, le design d'environnement, les habitudes-clés (le « domino »), et le suivi.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+        </div>
+        <h3>L'intro — le déclic</h3>
+        <p>Pourquoi tu n'as pas un problème de volonté (et ce que la science dit vraiment sur le temps qu'il faut pour ancrer une habitude).</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        </div>
+        <h3>Le cadre — 4 piliers</h3>
+        <p>La logique derrière tout le programme : systèmes, design d'environnement, habitudes-clés, suivi.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+        </div>
+        <h3>Le programme — 30 jours</h3>
+        <p>4 semaines, 4 phases, une page par jour : 1 principe court, 1 action concrète, 1 case à cocher.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><path d="M18 17V9M13 17V5M8 17v-4"/></svg>
+        </div>
+        <h3>Les trackers</h3>
+        <p>Tracker d'habitudes 30 jours, « Don't break the chain », plan de la semaine, bilans hebdomadaires.</p>
+      </div>
+    </div>
+    <div class="bonus-sources">
+      <strong>+ En bonus :</strong> une page « Jour 31 et au-delà » pour ne pas retomber une fois le défi terminé, et une page de sources honnêtes — chaque principe cité (4 000 semaines d'Oliver Burkeman, la vraie durée pour former une habitude selon Lally et al. 2010, les 4 lois de James Clear, les habitudes-clés de Charles Duhigg, les plans « si… alors » de Peter Gollwitzer, l'empilement d'habitudes de BJ Fogg, le temptation bundling de Katherine Milkman) est référencé, rien n'est inventé.
+    </div>
+  </div>
+</section>
+
+<!-- PROGRAMME SEMAINE PAR SEMAINE -->
+<section class="section section--light">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-tag">Le programme</span>
+      <h2 class="section-title">4 semaines, une progression logique</h2>
+      <p class="section-sub">Chaque semaine a un objectif précis. Le programme ne te demande jamais de tout changer d'un coup.</p>
+    </div>
+    <div class="week-list">
+      <div class="week-row">
+        <div class="week-num">S1 <small>Jours 1-7</small></div>
+        <div>
+          <h4>Voir la réalité en face</h4>
+          <p>Avant de construire, on observe : où part ton temps, ce qui te fait craquer, et pourquoi tu veux vraiment changer. Pas de grand changement cette semaine — juste des faits.</p>
+        </div>
+      </div>
+      <div class="week-row">
+        <div class="week-num">S2 <small>Jours 8-14</small></div>
+        <div>
+          <h4>Designer l'environnement</h4>
+          <p>On modifie le terrain : ajouter de la friction au mauvais comportement, en enlever au bon, mettre le téléphone à distance, réduire l'habitude-clé à sa version 2 minutes.</p>
+        </div>
+      </div>
+      <div class="week-row">
+        <div class="week-num">S3 <small>Jours 15-21</small></div>
+        <div>
+          <h4>Installer le système</h4>
+          <p>Les actions isolées deviennent une routine : plans « si… alors », démarrage de la chaîne à ne pas casser, protection de l'heure de pic d'énergie, définition d'un « plancher » pour les mauvais jours.</p>
+        </div>
+      </div>
+      <div class="week-row">
+        <div class="week-num">S4 <small>Jours 22-30</small></div>
+        <div>
+          <h4>Tenir &amp; devenir</h4>
+          <p>Gérer les ratés sans tout abandonner, rendre le tracker visible, passer de l'habitude à l'identité, et préparer le Jour 31 — parce que le Jour 30 n'est pas une fin, c'est un point de départ.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- APERÇU RÉEL -->
+<section class="section">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-tag">Aperçu réel</span>
+      <h2 class="section-title">Des vraies pages, pas un montage</h2>
+      <p class="section-sub">Les images ci-dessous sont extraites directement du PDF final — exactement ce que tu vas recevoir.</p>
+    </div>
+    <div class="preview-grid">
+      <div class="preview-item">
+        <img src="img/preview-cadre.png" alt="Page « Le cadre — Les 4 piliers du système » du workbook Discipline 30" loading="lazy">
+        <span>Le cadre — 4 piliers</span>
+      </div>
+      <div class="preview-item">
+        <img src="img/preview-semaine1.png" alt="Page Semaine 1, Jours 1 et 2 du workbook Discipline 30" loading="lazy">
+        <span>Semaine 1 — Jour 1 &amp; 2</span>
+      </div>
+      <div class="preview-item">
+        <img src="img/preview-tracker.png" alt="Page Tracker — suivi des habitudes sur 30 jours du workbook Discipline 30" loading="lazy">
+        <span>Tracker 30 jours</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA BAND -->
+<div class="cta-band-dark">
+  <span class="section-tag" style="background:rgba(245,158,11,.15);color:var(--amber)">Prêt à commencer</span>
+  <h2>30 jours pour construire ton système</h2>
+  <p>Paie en 30 secondes et télécharge ton PDF dans la foulée. Imprime-le, prends un stylo, et commence par la page « Avant de commencer ».</p>
+  <div class="price-row">
+    <span class="price-big">11 €</span>
+    <span class="price-note">Paiement unique · pas d'abonnement</span>
+  </div>
+  <button type="button" class="btn btn--amber btn--lg" onclick="bosBuyNow('Discipline 30 — Workbook 30 jours (PDF)', 11.00, 'discipline-30')">
+    Obtenir le programme — 11 €
+  </button>
+</div>
+
+<!-- FAQ -->
+<section class="section faq">
+  <div class="container">
+    <div class="text-center">
+      <span class="section-tag">Questions fréquentes</span>
+      <h2 class="section-title">Tout ce qu'il faut savoir</h2>
+    </div>
+    <div style="max-width:750px;margin:0 auto">
+      <details open>
+        <summary>Comment je reçois le workbook après le paiement ?</summary>
+        <p>Dès que le paiement PayPal est validé, tu arrives sur une page de téléchargement immédiat : tu récupères ton PDF tout de suite. Un souci ? Écris-nous à <a href="mailto:apprentissage.feynman@gmail.com">apprentissage.feynman@gmail.com</a>, on te le renvoie sous 24 h.</p>
+      </details>
+      <details>
+        <summary>C'est quel format ? Je peux l'imprimer ?</summary>
+        <p>Un PDF de 28 pages. Le workbook lui-même recommande de l'imprimer et de le remplir au stylo — « un workbook rempli au stylo vaut dix fichiers jamais ouverts ». Tu peux aussi le compléter directement à l'écran si tu préfères.</p>
+      </details>
+      <details>
+        <summary>Est-ce que ça remplace un accompagnement médical ou psychologique ?</summary>
+        <p>Non. Discipline 30 est un outil d'organisation personnelle et de motivation — pas un avis médical ni psychologique, et il ne garantit aucun résultat : le résultat dépend de ce que tu en fais. Le workbook le dit lui-même noir sur blanc, avec un rappel : si tu traverses une période difficile, parler à un professionnel est un acte de force, pas une faiblesse.</p>
+      </details>
+      <details>
+        <summary>Faut-il un compte PayPal pour payer ?</summary>
+        <p>Non. Tu peux payer directement par carte bancaire, sans créer de compte PayPal.</p>
+      </details>
+      <details>
+        <summary>Et si le programme ne me convient pas ?</summary>
+        <p>Satisfait ou remboursé : tu as 14 jours pour nous écrire à <a href="mailto:apprentissage.feynman@gmail.com">apprentissage.feynman@gmail.com</a>, on te rembourse sans discuter.</p>
+      </details>
+    </div>
+    <div class="softlink-box" style="max-width:750px;margin-left:auto;margin-right:auto">
+      💡 Envie de voir le problème avant la solution ? L'outil gratuit <a href="../ta-vie/">Ta Vie en Semaines</a> te montre en un coup d'œil combien de semaines il te reste — Discipline 30 est le système concret qui vient juste après.
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <a href="../index.html" class="logo">Focus<em>Lab</em></a>
+        <p>L'atelier de votre productivité.</p>
+      </div>
+      <div class="footer-col">
+        <h4>Discipline 30</h4>
+        <ul>
+          <li><a href="index.html">Le programme (PDF, 11 €)</a></li>
+          <li><a href="../ta-vie/">Ta Vie en Semaines (gratuit)</a></li>
+          <li><a href="https://www.youtube.com/@mindsetbrutfr" target="_blank" rel="noopener">Chaîne Mindset Brut</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4>Informations</h4>
+        <ul>
+          <li><a href="../a-propos.html">À propos</a></li>
+          <li><a href="../cgv.html">CGV &amp; Mentions légales</a></li>
+          <li><a href="../politique-confidentialite.html">Confidentialité</a></li>
+          <li><a href="mailto:apprentissage.feynman@gmail.com">Contact</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>&copy; 2026 FocusLab. Discipline 30 — Produit numérique (PDF), outil d'organisation personnelle, ne remplace pas un avis médical ou psychologique.</span>
+      <a href="../cgv.html">CGV</a>
+    </div>
+  </div>
+</footer>
+
+<script src="../bos-paypal.js"></script>
+<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
+<script>
+  // Menu mobile (identique au reste du site)
+  (function(){
+    var btn = document.querySelector('.hamburger');
+    var menu = document.querySelector('.mobile-menu');
+    var close = document.querySelector('.mobile-menu__close');
+    if (btn && menu) { btn.addEventListener('click', function(){ menu.classList.add('open'); }); }
+    if (close && menu) { close.addEventListener('click', function(){ menu.classList.remove('open'); }); }
+    menu && menu.querySelectorAll('a').forEach(function(a){ a.addEventListener('click', function(){ menu.classList.remove('open'); }); });
+  })();
+</script>
+</body>
+</html>
