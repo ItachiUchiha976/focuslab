@@ -99,6 +99,14 @@
   .foot a{color:var(--muted)}
   .hide{display:none!important}
   .install-tip{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+  /* Natif : remonter la barre d'action au-dessus de la bannière AdMob (ne jamais cacher le bouton "J'ai tenu") */
+  body.native .actionbar{bottom:58px}
+  body.native{--safe-ad:58px}
+  /* Gèle-série + Pro */
+  .freeze-row{display:flex;align-items:center;gap:10px;margin-top:14px}
+  .freeze-btn{flex:1;background:linear-gradient(180deg,#39507f,#283c66);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:11px 12px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
+  .freeze-btn.urgent{background:linear-gradient(180deg,#f7c26b,#f4a637);color:#20160a;border-color:transparent}
+  .pro-badge{display:inline-block;background:linear-gradient(180deg,#f7c26b,#f4a637);color:#20160a;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.4px}
 </style>
 </head>
 <body>
@@ -157,6 +165,9 @@
           <span id="streakLbl">jours</span> d'affilée 🔥
           <div class="muted" style="margin-top:8px" id="subStat">0 jour validé</div>
         </div>
+      </div>
+      <div class="freeze-row" id="freezeRow">
+        <button class="freeze-btn" id="btnFreeze">🧊 Gèle-série</button>
       </div>
     </div>
 
@@ -223,6 +234,12 @@
       <button type="submit" class="btn btn--amber btn--sm" style="margin-top:8px">M'inscrire (sans spam)</button>
     </form>
 
+    <label class="lbl hide" style="margin-top:18px" id="proLbl">Discipline 30 Pro <span class="pro-badge">SANS PUB</span></label>
+    <div id="proBox" class="hide">
+      <p class="muted" style="font-size:13px;margin:0 0 8px">Supprime les pubs + <strong>gèle-série illimité</strong> pour protéger ta série sans regarder de pub. Un seul paiement, à vie.</p>
+      <button class="btn btn--amber btn--sm" id="btnPro" style="width:auto">✨ Passer Pro</button>
+    </div>
+
     <label class="lbl" style="margin-top:18px">Défi en cours</label>
     <button class="btn btn--ghost btn--sm" id="btnReset" style="width:auto">Abandonner & recommencer</button>
     <p class="muted" style="font-size:12px;margin-top:14px">Version 1.0 · <a href="../index.html">focuslabboutique.fr</a></p>
@@ -262,10 +279,12 @@
   /* ---- computed ---- */
   function doneCount(){ return Object.keys(state.checks||{}).filter(function(k){return state.checks[k];}).length; }
   function isChecked(iso){ return !!(state.checks&&state.checks[iso]); }
+  function isFrozen(iso){ return !!(state&&state.frozen&&state.frozen[iso]); }
+  function isEffectivelyDone(iso){ return isChecked(iso) || isFrozen(iso); }  // un jour "gelé" maintient la série
   function computeStreak(){
-    var t=todayISO(), i=0, cur=t, n=0;
-    if(!isChecked(t)) cur=addDays(t,-1); // streak still counts if today not done yet
-    while(isChecked(cur)){ n++; cur=addDays(cur,-1); if(n>2000)break; }
+    var t=todayISO(), cur=t, n=0;
+    if(!isEffectivelyDone(t)) cur=addDays(t,-1); // streak still counts if today not done yet
+    while(isEffectivelyDone(cur)){ n++; cur=addDays(cur,-1); if(n>2000)break; }
     return n;
   }
 
@@ -322,6 +341,7 @@
     if(done){ b.textContent='✓ Validé aujourd\'hui — reviens demain'; b.disabled=true; b.className='btn btn--ghost'; }
     else { b.textContent='✓ J\'ai tenu aujourd\'hui'; b.disabled=false; b.className='btn btn--ok'; }
     buildCal();
+    updateFreezeBtn();
   }
   function buildCal(){
     var cal=$('cal'); cal.innerHTML=''; var t=todayISO(), idx=dayIndex();
@@ -329,6 +349,7 @@
       var iso=addDays(state.start,i);
       var d=document.createElement('div'); d.className='d'; d.textContent=(i+1);
       if(isChecked(iso)) d.classList.add('done');
+      else if(isFrozen(iso)){ d.classList.add('done'); d.textContent='🧊'; }
       else if(iso===t) d.classList.add('today');
       else if(i<idx) d.classList.add('missed');
       else if(i>idx) d.classList.add('future');
@@ -354,6 +375,7 @@
     if(state && doneCount()>0 && !confirm('Démarrer un nouveau défi remplace celui en cours. Continuer ?'))return;
     state=null; save(); localStorage.removeItem(KEY); pick={emo:'🎯',name:'',dur:30};
     show('onboarding'); buildTemplates(); $('durSeg').children[1].click&&0;
+    try{showInterstitial();}catch(e){}   // pub à un moment naturel (rare), jamais pendant le check quotidien
   });
   $('btnReset').addEventListener('click',function(){
     if(!confirm('Abandonner le défi en cours et tout remettre à zéro ?'))return;
@@ -446,11 +468,11 @@
   $('btnRemOn').addEventListener('click',function(){
     if(!state){toast('Lance d\'abord un défi');return;}
     var t=$('remTime').value||'19:00';
-    function set(){ state.reminder={on:true,time:t}; save(); syncRemUI(); toast('Rappel activé à '+t); }
+    function set(){ state.reminder={on:true,time:t}; save(); syncRemUI(); try{scheduleNativeReminder();}catch(e){} toast('Rappel activé à '+t); }
     if('Notification' in window && Notification.permission!=='granted'){ Notification.requestPermission().then(function(p){ set(); }); }
     else set();
   });
-  $('btnRemOff').addEventListener('click',function(){ if(state){state.reminder={on:false,time:($('remTime').value||'19:00')};save();syncRemUI();toast('Rappel désactivé');} });
+  $('btnRemOff').addEventListener('click',function(){ if(state){state.reminder={on:false,time:($('remTime').value||'19:00')};save();syncRemUI();try{scheduleNativeReminder();}catch(e){}toast('Rappel désactivé');} });
   function checkReminder(){
     var r=state&&state.reminder; if(!r||!r.on)return; if(isChecked(todayISO()))return;
     if(!('Notification'in window)||Notification.permission!=='granted')return;
@@ -472,9 +494,114 @@
     });
   })();
 
+  /* ================= NATIF — AdMob (bannière + interstitiel + rewarded) & Pro ================= */
+  var Cap=window.Capacitor;
+  var isNative=!!(Cap && Cap.isNativePlatform && Cap.isNativePlatform());
+  var AdMob=(isNative && Cap.Plugins)?Cap.Plugins.AdMob:null;
+  var LN=(isNative && Cap.Plugins)?Cap.Plugins.LocalNotifications:null;
+  var AD_BANNER='ca-app-pub-3940256099942544/6300978111';   // TEST — remplacer par l'ID prod
+  var AD_INTER='ca-app-pub-3940256099942544/1033173712';    // TEST
+  var AD_REWARD='ca-app-pub-3940256099942544/5224354917';   // TEST rewarded
+  var interReady=false, rewardReady=false, pendingReward=null, rewardGranted=false;
+  function isPro(){ return localStorage.getItem('disc30_premium')==='1'; }
+
+  function admobInit(){
+    if(!AdMob || isPro()) return;
+    AdMob.initialize({initializeForTesting:true}).then(function(){
+      try{ AdMob.addListener('interstitialAdDismissed',function(){ interReady=false; prepInter(); }); }catch(e){}
+      try{ AdMob.addListener('interstitialAdFailedToShow',function(){ interReady=false; prepInter(); }); }catch(e){}
+      try{ AdMob.addListener('onRewardedVideoAdReward',function(){ rewardGranted=true; }); }catch(e){}
+      try{ AdMob.addListener('onRewardedVideoAdDismissed',onRewardClosed); }catch(e){}
+      try{ AdMob.addListener('onRewardedVideoAdFailedToShow',onRewardFail); }catch(e){}
+      prepInter(); prepReward();
+      AdMob.showBanner({adId:AD_BANNER,adSize:'ADAPTIVE_BANNER',position:'BOTTOM_CENTER',margin:0,isTesting:true}).catch(function(){});
+    }).catch(function(){});
+  }
+  function prepInter(){ if(!AdMob)return; AdMob.prepareInterstitial({adId:AD_INTER,isTesting:true}).then(function(){interReady=true;}).catch(function(){interReady=false;}); }
+  function prepReward(){ if(!AdMob)return; AdMob.prepareRewardVideoAd({adId:AD_REWARD,isTesting:true}).then(function(){rewardReady=true;}).catch(function(){rewardReady=false;}); }
+  function showInterstitial(){ if(!AdMob||isPro()||!interReady)return; AdMob.showInterstitial().catch(function(){}); }
+  function showRewarded(cb){
+    if(isPro()){ cb&&cb(); return; }
+    if(AdMob && rewardReady){ pendingReward=cb; rewardGranted=false; AdMob.showRewardVideoAd().catch(function(){ pendingReward=null; cb&&cb(); }); }
+    else { cb&&cb(); }   // web (pas de pub) / no-fill : on accorde directement
+  }
+  function onRewardClosed(){ rewardReady=false; prepReward(); var cb=pendingReward; pendingReward=null; var g=rewardGranted; rewardGranted=false; if(cb && g) cb(); }
+  function onRewardFail(){ var cb=pendingReward; pendingReward=null; if(cb) cb(); }
+
+  // pub temporisée ~30 min (native, jamais quand un modal est ouvert)
+  setInterval(function(){ if(AdMob && !isPro() && !document.querySelector('.modal.show')){ showInterstitial(); } }, 30*60*1000);
+
+  /* ---- Pro ---- */
+  function applyPremium(){ localStorage.setItem('disc30_premium','1'); if(AdMob){ try{AdMob.hideBanner();}catch(e){} try{AdMob.removeBanner();}catch(e){} } document.body.classList.remove('native-ads'); showProUI(); render(); toast('Merci ! Pubs supprimées + gèle-série illimité ✨'); }
+  function buyPremium(){ /* Google Play Billing à brancher à la publication */ toast('Bientôt : Pro via le Play Store ✨'); }
+  function showProUI(){
+    if(!isNative) return;   // Pro = uniquement sur l'app native (le web reste le funnel boutique gratuit)
+    $('proLbl').classList.remove('hide');
+    if(isPro()){ $('proBox').classList.add('hide'); $('proLbl').innerHTML='Discipline 30 Pro <span class="pro-badge">ACTIF ✓</span>'; }
+    else $('proBox').classList.remove('hide');
+  }
+  (function(){ var pb=$('btnPro'); if(pb) pb.addEventListener('click',buyPremium); })();
+
+  /* ---- Gèle-série (streak freeze) ---- */
+  function dayIndexOf(iso){ return Math.round((new Date(iso)-new Date(state.start))/86400000); }
+  function yesterdayMissed(){
+    if(!state) return false;
+    var y=addDays(todayISO(),-1);
+    if(y<state.start) return false;
+    var idx=dayIndexOf(y);
+    if(idx<0 || idx>=state.dur) return false;
+    return !isEffectivelyDone(y);
+  }
+  function grantFreezeToYesterday(){ state.frozen=state.frozen||{}; state.frozen[addDays(todayISO(),-1)]=true; save(); render(); toast('🧊 Série sauvée !'); }
+  function stockFreeze(){ state.freezes=(state.freezes||0)+1; save(); updateFreezeBtn(); toast('🧊 +1 gèle-série en réserve'); }
+  function maybeAutoFreeze(){
+    if(!state) return;
+    if(yesterdayMissed()){
+      if(isPro()) grantFreezeToYesterday();
+      else if((state.freezes||0)>0){ state.freezes--; grantFreezeToYesterday(); }
+    }
+  }
+  function updateFreezeBtn(){
+    var b=$('btnFreeze'); if(!b) return;
+    var res=(state&&state.freezes)||0;
+    if(yesterdayMissed()){ b.classList.add('urgent'); b.innerHTML='🧊 Sauver ma série (tu as raté hier)'; }
+    else { b.classList.remove('urgent'); b.innerHTML='🧊 Gèle-série'+(res>0?(' · '+res+' en réserve'):''); }
+  }
+  $('btnFreeze').addEventListener('click',function(){
+    if(!state){ toast('Lance d\'abord un défi 🙂'); return; }
+    if(yesterdayMissed()){
+      if(isPro()){ grantFreezeToYesterday(); return; }
+      if((state.freezes||0)>0){ state.freezes--; save(); grantFreezeToYesterday(); return; }
+      if(AdMob){ toast('Regarde une courte pub pour sauver ta série 🧊'); }
+      showRewarded(grantFreezeToYesterday);
+    } else {
+      if(isPro()){ toast('Pro : ta série est déjà protégée ✨'); return; }
+      if(AdMob){ toast('Regarde une courte pub pour +1 gèle-série 🧊'); }
+      showRewarded(stockFreeze);
+    }
+  });
+
+  /* ---- rappel natif (notification locale quotidienne) ---- */
+  function scheduleNativeReminder(){
+    if(!LN) return; var r=state&&state.reminder; if(!r||!r.on){ try{ LN.cancel({notifications:[{id:777}]}); }catch(e){} return; }
+    var hm=(r.time||'19:00').split(':');
+    LN.requestPermissions().then(function(){
+      try{ LN.cancel({notifications:[{id:777}]}); }catch(e){}
+      LN.schedule({notifications:[{
+        id:777, title:'Discipline 30 🔥',
+        body:'Tu n\'as pas encore validé ton défi aujourd\'hui. On tient la série !',
+        schedule:{ on:{ hour:+hm[0], minute:+hm[1] }, allowWhileIdle:true }
+      }]}).catch(function(){});
+    }).catch(function(){});
+  }
+
   /* ---- boot ---- */
+  if(isNative){ document.body.classList.add('native'); showProUI(); }
   if(state) show('home'); else { show('onboarding'); buildTemplates(); }
+  maybeAutoFreeze();
   render(); checkReminder();
+  admobInit();
+  scheduleNativeReminder();
   document.addEventListener('visibilitychange',function(){ if(!document.hidden){ render(); checkReminder(); }});
 
   /* ---- PWA service worker ---- */
