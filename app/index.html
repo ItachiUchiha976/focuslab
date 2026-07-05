@@ -596,7 +596,10 @@
   }
 
   /* ---- boot ---- */
-  if(isNative){ document.body.classList.add('native'); showProUI(); }
+  if(isNative){
+    document.body.classList.add('native'); showProUI();
+    try{ if(Cap.Plugins.App) Cap.Plugins.App.addListener('backButton',function(){ var m=document.querySelector('.modal.show'); if(m){ m.classList.remove('show'); } else if(Cap.Plugins.App.minimizeApp){ Cap.Plugins.App.minimizeApp(); } }); }catch(e){}
+  }
   if(state) show('home'); else { show('onboarding'); buildTemplates(); }
   maybeAutoFreeze();
   render(); checkReminder();

@@ -1,5 +1,5 @@
 /* Discipline 30 — FocusLab · service worker (offline-first pour l'app shell) */
-var CACHE = 'discipline30-v2';
+var CACHE = 'discipline30-v3';
 var ASSETS = [
   './',
   './index.html',
