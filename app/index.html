@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Discipline 30 — l'app qui transforme ta discipline en série 🔥 | FocusLab</title>
+<meta name="description" content="Choisis un défi, coche chaque jour, garde ta série. Discipline 30 fabrique automatiquement une carte de progression à partager. Gratuit, sans compte, hors-ligne.">
+<meta name="theme-color" content="#0b1220">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon-192.png">
+<meta property="og:title" content="Discipline 30 — transforme ta discipline en série 🔥">
+<meta property="og:description" content="Choisis un défi, coche chaque jour, garde ta série. Une app FocusLab, gratuite et sans compte.">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://focuslabboutique.fr/app/">
+<style>
+  :root{
+    --bg:#0b1220; --bg2:#080e1c; --panel:#16233f; --panel2:#1d2e50;
+    --line:#2a3d68; --accent:#f4a637; --accent2:#f7c26b;
+    --text:#eaf0fb; --muted:#9fb0d0; --ok:#49d67f;
+    --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0}
+  body{
+    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:radial-gradient(1200px 700px at 50% -10%, #16233f 0%, var(--bg) 45%, var(--bg2) 100%);
+    color:var(--text); min-height:100vh; min-height:100dvh;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:520px;margin:0 auto;padding:0 18px calc(120px + env(safe-area-inset-bottom))}
+  a{color:var(--accent2)}
+  /* Header */
+  header.app{display:flex;align-items:center;justify-content:space-between;padding:18px 4px 10px}
+  .brand{font-family:Georgia,"Times New Roman",serif;font-size:20px;font-weight:700;letter-spacing:.2px}
+  .brand em{color:var(--accent);font-style:normal}
+  .brand small{display:block;font-family:-apple-system,sans-serif;font-size:10px;letter-spacing:2px;color:var(--muted);font-weight:600;margin-top:1px}
+  .ico-btn{background:var(--panel);border:1px solid var(--line);color:var(--text);width:42px;height:42px;border-radius:12px;font-size:18px;display:flex;align-items:center;justify-content:center;cursor:pointer}
+  /* Cards */
+  .card{background:linear-gradient(180deg,var(--panel) 0%, #12203c 100%);border:1px solid var(--line);border-radius:var(--radius);padding:20px;margin:14px 0;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+  h1{font-size:26px;line-height:1.15;margin:0 0 6px}
+  h2{font-size:18px;margin:0 0 12px}
+  p{line-height:1.5;color:var(--muted);margin:0 0 12px}
+  .muted{color:var(--muted)}
+  /* Buttons */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:14px;padding:15px 18px;font-size:16px;font-weight:700;cursor:pointer;width:100%;transition:transform .06s ease, filter .15s ease}
+  .btn:active{transform:scale(.98)}
+  .btn--amber{background:linear-gradient(180deg,var(--accent2),var(--accent));color:#20160a}
+  .btn--ghost{background:transparent;border:1px solid var(--line);color:var(--text)}
+  .btn--ok{background:linear-gradient(180deg,#5be08e,#37c46e);color:#062012}
+  .btn--sm{width:auto;padding:11px 14px;font-size:14px;border-radius:12px}
+  .btn[disabled]{opacity:.55;cursor:default}
+  .row{display:flex;gap:10px}
+  .row>.btn{flex:1}
+  /* Onboarding templates */
+  .tmpl-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+  .tmpl{background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:14px;cursor:pointer;text-align:left;color:var(--text);font-size:15px;font-weight:600;display:flex;align-items:center;gap:10px;transition:border-color .15s}
+  .tmpl:hover,.tmpl.sel{border-color:var(--accent)}
+  .tmpl .emo{font-size:22px}
+  .field{width:100%;background:var(--bg2);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:14px;font-size:16px;margin-top:8px}
+  .seg{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap}
+  .seg button{flex:1;min-width:60px;background:var(--panel2);border:1px solid var(--line);color:var(--text);border-radius:11px;padding:12px 6px;font-weight:700;cursor:pointer}
+  .seg button.sel{background:linear-gradient(180deg,var(--accent2),var(--accent));color:#20160a;border-color:transparent}
+  label.lbl{display:block;font-size:13px;color:var(--muted);font-weight:600;margin:16px 0 2px;text-transform:uppercase;letter-spacing:.5px}
+  /* Home: ring + streak */
+  .hero-stat{display:flex;align-items:center;gap:18px}
+  .ring{position:relative;width:120px;height:120px;flex:0 0 120px}
+  .ring svg{transform:rotate(-90deg)}
+  .ring .val{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ring .val b{font-size:30px;line-height:1}
+  .ring .val span{font-size:11px;color:var(--muted);margin-top:2px}
+  .streak{font-size:15px}
+  .streak b{font-size:34px;display:block;line-height:1;color:var(--accent2)}
+  .hab{display:flex;align-items:center;gap:10px;margin:2px 0 4px}
+  .hab .emo{font-size:26px}
+  .hab .nm{font-size:20px;font-weight:700}
+  /* Calendar */
+  .cal{display:grid;grid-template-columns:repeat(7,1fr);gap:7px;margin-top:6px}
+  .cal .d{aspect-ratio:1;border-radius:10px;background:var(--panel2);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--muted);position:relative}
+  .cal .d.done{background:linear-gradient(180deg,#5be08e,#2fb765);color:#062012;border-color:transparent;font-weight:800}
+  .cal .d.today{outline:2px solid var(--accent);outline-offset:1px;color:var(--text)}
+  .cal .d.future{opacity:.45}
+  .cal .d.missed{background:transparent;border-style:dashed;color:#6b7ba0}
+  /* success banner */
+  .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#0f1a30;border:1px solid var(--accent);color:var(--text);padding:12px 18px;border-radius:14px;font-weight:600;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 12px 30px rgba(0,0,0,.4)}
+  .toast.show{opacity:1}
+  /* Bottom action bar */
+  .actionbar{position:fixed;left:0;right:0;bottom:0;padding:12px 18px calc(12px + env(safe-area-inset-bottom));background:linear-gradient(180deg,rgba(11,18,32,0) 0%, var(--bg) 30%);max-width:520px;margin:0 auto}
+  /* Modal */
+  .modal{position:fixed;inset:0;background:rgba(4,8,18,.72);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:80;padding:18px}
+  .modal.show{display:flex}
+  .modal .sheet{background:var(--panel);border:1px solid var(--line);border-radius:20px;max-width:460px;width:100%;padding:20px;max-height:92vh;overflow:auto}
+  .share-preview{width:100%;border-radius:14px;border:1px solid var(--line);display:block;margin:0 auto 14px;background:var(--bg2)}
+  .close-x{float:right;background:none;border:none;color:var(--muted);font-size:26px;cursor:pointer;line-height:1}
+  .pill{display:inline-block;background:var(--panel2);border:1px solid var(--line);border-radius:999px;padding:5px 12px;font-size:12px;color:var(--accent2);font-weight:700;letter-spacing:.4px}
+  .xsell{background:linear-gradient(120deg,#20305a,#182645);border:1px solid var(--line)}
+  .xsell h2{color:var(--accent2)}
+  input[type=time]{color-scheme:dark}
+  .foot{ text-align:center;color:var(--muted);font-size:12px;padding:20px 0 8px}
+  .foot a{color:var(--muted)}
+  .hide{display:none!important}
+  .install-tip{font-size:13px;color:var(--muted);text-align:center;margin-top:8px}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header class="app">
+    <div class="brand">Focus<em>Lab</em><small>DISCIPLINE&nbsp;30</small></div>
+    <button class="ico-btn" id="btnSettings" aria-label="Réglages" title="Réglages">⚙️</button>
+  </header>
+
+  <!-- ONBOARDING -->
+  <section id="onboarding" class="hide">
+    <div class="card">
+      <span class="pill">NOUVEAU DÉFI</span>
+      <h1 style="margin-top:10px">Choisis ton défi.<br>Une série commence aujourd'hui.</h1>
+      <p>Une habitude, une durée. Tu coches chaque jour, l'app garde ta série 🔥 et fabrique ta carte à partager.</p>
+
+      <label class="lbl">Un modèle (ou crée le tien)</label>
+      <div class="tmpl-grid" id="tmplGrid"></div>
+
+      <label class="lbl">Ton habitude</label>
+      <input class="field" id="habName" placeholder="Ex : 30 min de sport" maxlength="42">
+
+      <label class="lbl">Durée du défi</label>
+      <div class="seg" id="durSeg">
+        <button data-d="7">7 j</button>
+        <button data-d="30" class="sel">30 j</button>
+        <button data-d="60">60 j</button>
+        <button data-d="90">90 j</button>
+      </div>
+
+      <div style="margin-top:18px">
+        <button class="btn btn--amber" id="btnStart">Démarrer mon défi 🚀</button>
+      </div>
+    </div>
+    <p class="foot">Gratuit · sans compte · fonctionne hors-ligne · tes données restent sur ton téléphone.</p>
+  </section>
+
+  <!-- HOME -->
+  <section id="home" class="hide">
+    <div class="card">
+      <div class="hab">
+        <span class="emo" id="habEmo">🎯</span>
+        <span class="nm" id="habTitle">Mon défi</span>
+      </div>
+      <div class="hero-stat">
+        <div class="ring">
+          <svg width="120" height="120" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#22345c" stroke-width="12"/>
+            <circle id="ringFg" cx="60" cy="60" r="52" fill="none" stroke="url(#g1)" stroke-width="12" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+            <defs><linearGradient id="g1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f7c26b"/><stop offset="1" stop-color="#f4a637"/></linearGradient></defs>
+          </svg>
+          <div class="val"><b id="ringDay">0</b><span id="ringTot">sur 30</span></div>
+        </div>
+        <div class="streak">
+          <b id="streakN">0</b>
+          <span id="streakLbl">jours</span> d'affilée 🔥
+          <div class="muted" style="margin-top:8px" id="subStat">0 jour validé</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="cal" id="cal"></div>
+    </div>
+
+    <div class="card xsell" id="xsell">
+      <h2>Envie d'un vrai système, pas juste un tracker ?</h2>
+      <p>Le workbook <strong>Discipline 30</strong> (PDF, 28 pages) te donne la méthode jour par jour pour tenir ton défi jusqu'au bout.</p>
+      <a class="btn btn--ghost btn--sm" href="../discipline-30/" style="width:auto;display:inline-flex">Voir le programme (11 €) →</a>
+    </div>
+  </section>
+
+  <div class="foot" id="globalFoot">
+    <a href="../index.html">FocusLab</a> · <a href="../discipline-30/">Discipline 30 (PDF)</a> · <a href="../ta-vie/">Ta Vie en Semaines</a><br>
+    Outil d'organisation personnelle — ne remplace pas un avis médical ou psychologique.
+  </div>
+</div>
+
+<!-- BOTTOM ACTION BAR (home only) -->
+<div class="actionbar hide" id="actionbar">
+  <div class="row" style="margin-bottom:10px">
+    <button class="btn btn--ghost btn--sm" id="btnShare">📸 Partager</button>
+    <button class="btn btn--ghost btn--sm" id="btnNew">＋ Nouveau défi</button>
+  </div>
+  <button class="btn btn--ok" id="btnCheck">✓ J'ai tenu aujourd'hui</button>
+</div>
+
+<!-- SHARE MODAL -->
+<div class="modal" id="shareModal">
+  <div class="sheet">
+    <button class="close-x" data-close>×</button>
+    <h2>Ta carte de progression</h2>
+    <canvas id="shareCanvas" class="share-preview" width="1080" height="1920"></canvas>
+    <div class="row" style="margin-bottom:8px">
+      <button class="btn btn--amber btn--sm" id="btnShareNow">Partager</button>
+      <button class="btn btn--ghost btn--sm" id="btnDownload">Télécharger</button>
+    </div>
+    <p class="muted" style="font-size:12px;text-align:center;margin:6px 0 0">Poste-la en story / Short — c'est ce qui fait connaître ton défi (et l'app 🙂).</p>
+  </div>
+</div>
+
+<!-- SETTINGS MODAL -->
+<div class="modal" id="setModal">
+  <div class="sheet">
+    <button class="close-x" data-close>×</button>
+    <h2>Réglages</h2>
+    <label class="lbl">Rappel quotidien</label>
+    <input type="time" class="field" id="remTime" value="19:00">
+    <div class="row" style="margin-top:10px">
+      <button class="btn btn--ghost btn--sm" id="btnRemOn">Activer le rappel</button>
+      <button class="btn btn--ghost btn--sm" id="btnRemOff">Désactiver</button>
+    </div>
+    <p class="muted" id="remState" style="font-size:12px;margin-top:8px">Rappel désactivé.</p>
+
+    <label class="lbl" style="margin-top:18px">Recevoir les nouveautés FocusLab</label>
+    <form class="lead-capture-form" action="https://api.web3forms.com/submit" method="POST">
+      <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
+      <input type="hidden" name="subject" value="FocusLab App — inscription Discipline 30">
+      <input type="hidden" name="from_name" value="FocusLab App">
+      <input type="checkbox" name="botcheck" style="display:none!important" tabindex="-1" autocomplete="off">
+      <input type="email" name="email" required placeholder="Ton email" class="field" aria-label="Ton email">
+      <button type="submit" class="btn btn--amber btn--sm" style="margin-top:8px">M'inscrire (sans spam)</button>
+    </form>
+
+    <label class="lbl" style="margin-top:18px">Défi en cours</label>
+    <button class="btn btn--ghost btn--sm" id="btnReset" style="width:auto">Abandonner & recommencer</button>
+    <p class="muted" style="font-size:12px;margin-top:14px">Version 1.0 · <a href="../index.html">focuslabboutique.fr</a></p>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* ---------- Discipline 30 — FocusLab · MVP autonome (localStorage, offline) ---------- */
+(function(){
+  "use strict";
+  var KEY='fl_discipline30_v1';
+  var TEMPLATES=[
+    {emo:'💪',name:'30 min de sport'},
+    {emo:'📚',name:'20 min de lecture'},
+    {emo:'⏰',name:'Réveil avant 7h'},
+    {emo:'📵',name:'Pas d\'écran le soir'},
+    {emo:'🧘',name:'10 min de méditation'},
+    {emo:'💧',name:'Boire 2 L d\'eau'},
+    {emo:'✍️',name:'Écrire 3 lignes'},
+    {emo:'🎯',name:'Mon défi perso'}
+  ];
+  var state=load();
+  var pick={emo:'🎯',name:'',dur:30};
+
+  /* ---- storage ---- */
+  function load(){ try{return JSON.parse(localStorage.getItem(KEY))||null;}catch(e){return null;} }
+  function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
+  function todayISO(d){ d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
+  function addDays(iso,n){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+n); return todayISO(d); }
+  function dayIndex(){ // 0-based index of today within the challenge
+    var s=state.start, t=todayISO(); var a=new Date(s), b=new Date(t);
+    return Math.round((b-a)/86400000);
+  }
+
+  /* ---- computed ---- */
+  function doneCount(){ return Object.keys(state.checks||{}).filter(function(k){return state.checks[k];}).length; }
+  function isChecked(iso){ return !!(state.checks&&state.checks[iso]); }
+  function computeStreak(){
+    var t=todayISO(), i=0, cur=t, n=0;
+    if(!isChecked(t)) cur=addDays(t,-1); // streak still counts if today not done yet
+    while(isChecked(cur)){ n++; cur=addDays(cur,-1); if(n>2000)break; }
+    return n;
+  }
+
+  /* ---- views ---- */
+  var $=function(id){return document.getElementById(id);};
+  function show(view){
+    $('onboarding').classList.toggle('hide',view!=='onboarding');
+    $('home').classList.toggle('hide',view!=='home');
+    $('actionbar').classList.toggle('hide',view!=='home');
+    $('globalFoot').classList.toggle('hide',view!=='home'&&view!=='onboarding');
+  }
+
+  /* ---- onboarding ---- */
+  function buildTemplates(){
+    var g=$('tmplGrid'); g.innerHTML='';
+    TEMPLATES.forEach(function(t,i){
+      var b=document.createElement('button'); b.className='tmpl'; b.type='button';
+      b.innerHTML='<span class="emo">'+t.emo+'</span> '+t.name;
+      b.onclick=function(){
+        [].forEach.call(g.children,function(c){c.classList.remove('sel');});
+        b.classList.add('sel'); pick.emo=t.emo;
+        if(t.name!=='Mon défi perso'){ $('habName').value=t.name; pick.name=t.name; }
+        else { $('habName').value=''; $('habName').focus(); pick.name=''; }
+      };
+      g.appendChild(b);
+    });
+  }
+  $('durSeg').addEventListener('click',function(e){
+    var b=e.target.closest('button'); if(!b)return;
+    [].forEach.call(this.children,function(c){c.classList.remove('sel');});
+    b.classList.add('sel'); pick.dur=+b.dataset.d;
+  });
+  $('habName').addEventListener('input',function(){ pick.name=this.value.trim(); });
+  $('btnStart').addEventListener('click',function(){
+    var name=($('habName').value||'').trim();
+    if(!name){ toast('Écris ton habitude 🙂'); $('habName').focus(); return; }
+    state={ emo:pick.emo||'🎯', name:name, dur:pick.dur||30, start:todayISO(), checks:{}, created:todayISO(), reminder:(state&&state.reminder)||null };
+    save(); render(); show('home'); toast('Défi lancé — à toi de jouer 🔥');
+  });
+
+  /* ---- home render ---- */
+  function render(){
+    if(!state){ show('onboarding'); buildTemplates(); return; }
+    $('habEmo').textContent=state.emo; $('habTitle').textContent=state.name;
+    var dc=doneCount(), dur=state.dur, idx=dayIndex();
+    var pct=Math.min(1, dc/dur);
+    var C=326.7; $('ringFg').style.strokeDashoffset=(C*(1-pct)).toFixed(1);
+    $('ringDay').textContent=dc; $('ringTot').textContent='sur '+dur;
+    $('streakN').textContent=computeStreak();
+    $('subStat').textContent=dc+' jour'+(dc>1?'s':'')+' validé'+(dc>1?'s':'')+' · jour '+Math.min(idx+1,dur)+' du défi';
+    // check button state
+    var t=todayISO(), done=isChecked(t);
+    var b=$('btnCheck');
+    if(done){ b.textContent='✓ Validé aujourd\'hui — reviens demain'; b.disabled=true; b.className='btn btn--ghost'; }
+    else { b.textContent='✓ J\'ai tenu aujourd\'hui'; b.disabled=false; b.className='btn btn--ok'; }
+    buildCal();
+  }
+  function buildCal(){
+    var cal=$('cal'); cal.innerHTML=''; var t=todayISO(), idx=dayIndex();
+    for(var i=0;i<state.dur;i++){
+      var iso=addDays(state.start,i);
+      var d=document.createElement('div'); d.className='d'; d.textContent=(i+1);
+      if(isChecked(iso)) d.classList.add('done');
+      else if(iso===t) d.classList.add('today');
+      else if(i<idx) d.classList.add('missed');
+      else if(i>idx) d.classList.add('future');
+      cal.appendChild(d);
+    }
+  }
+
+  /* ---- check today ---- */
+  $('btnCheck').addEventListener('click',function(){
+    if(!state)return; var t=todayISO();
+    state.checks=state.checks||{}; state.checks[t]=true; save(); render();
+    var st=computeStreak();
+    toast(st>1?('🔥 '+st+' jours d\'affilée !'):'Bien joué, jour 1 posé 💪');
+    // milestone → propose share
+    var dc=doneCount();
+    if(dc===1||dc===7||dc===15||dc===21||dc===30||dc===state.dur||dc%10===0){
+      setTimeout(openShare,650);
+    }
+  });
+
+  /* ---- new / reset ---- */
+  $('btnNew').addEventListener('click',function(){
+    if(state && doneCount()>0 && !confirm('Démarrer un nouveau défi remplace celui en cours. Continuer ?'))return;
+    state=null; save(); localStorage.removeItem(KEY); pick={emo:'🎯',name:'',dur:30};
+    show('onboarding'); buildTemplates(); $('durSeg').children[1].click&&0;
+  });
+  $('btnReset').addEventListener('click',function(){
+    if(!confirm('Abandonner le défi en cours et tout remettre à zéro ?'))return;
+    localStorage.removeItem(KEY); state=null; closeModals(); show('onboarding'); buildTemplates();
+  });
+
+  /* ---- toast ---- */
+  var toT;
+  function toast(m){ var el=$('toast'); el.textContent=m; el.classList.add('show'); clearTimeout(toT); toT=setTimeout(function(){el.classList.remove('show');},2200); }
+
+  /* ---- modals ---- */
+  function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); }
+  document.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')||e.target.classList.contains('modal')) closeModals(); });
+  $('btnSettings').addEventListener('click',function(){ syncRemUI(); $('setModal').classList.add('show'); });
+
+  /* ---- share card (Canvas 1080x1920) ---- */
+  function openShare(){ drawCard(); $('shareModal').classList.add('show'); }
+  $('btnShare').addEventListener('click',openShare);
+  function roundRect(c,x,y,w,h,r){c.beginPath();c.moveTo(x+r,y);c.arcTo(x+w,y,x+w,y+h,r);c.arcTo(x+w,y+h,x,y+h,r);c.arcTo(x,y+h,x,y,r);c.arcTo(x,y,x+w,y,r);c.closePath();}
+  function drawCard(){
+    var cv=$('shareCanvas'), c=cv.getContext('2d'), W=1080,H=1920;
+    var dc=doneCount(), dur=state.dur, st=computeStreak(), pct=Math.min(1,dc/dur);
+    // bg
+    var g=c.createLinearGradient(0,0,W,H); g.addColorStop(0,'#16233f'); g.addColorStop(.5,'#0b1220'); g.addColorStop(1,'#080e1c');
+    c.fillStyle=g; c.fillRect(0,0,W,H);
+    // ambient rings
+    c.strokeStyle='rgba(244,166,55,0.10)'; c.lineWidth=2;
+    for(var k=0;k<3;k++){ c.beginPath(); c.arc(W/2,470,220+k*70,0,Math.PI*2); c.stroke(); }
+    // border
+    c.strokeStyle='rgba(122,150,200,0.35)'; c.lineWidth=3; roundRect(c,44,44,W-88,H-88,40); c.stroke();
+    // brand
+    c.textAlign='center'; c.fillStyle='#eaf0fb'; c.font='700 52px Georgia, serif';
+    c.fillText('Focus', W/2-52, 175); c.fillStyle='#f4a637'; c.fillText('Lab', W/2+70, 175);
+    c.fillStyle='#9fb0d0'; c.font='700 24px -apple-system, Segoe UI, sans-serif'; c.fillText('D I S C I P L I N E   3 0', W/2, 220);
+    // progress ring
+    var cx=W/2, cy=470, R=180;
+    c.lineWidth=30; c.strokeStyle='#22345c'; c.beginPath(); c.arc(cx,cy,R,0,Math.PI*2); c.stroke();
+    var gg=c.createLinearGradient(cx-R,cy-R,cx+R,cy+R); gg.addColorStop(0,'#f7c26b'); gg.addColorStop(1,'#f4a637');
+    c.strokeStyle=gg; c.lineCap='round'; c.beginPath(); c.arc(cx,cy,R,-Math.PI/2,-Math.PI/2+Math.PI*2*pct); c.stroke();
+    c.fillStyle='#ffffff'; c.font='800 130px -apple-system, Segoe UI, sans-serif'; c.fillText(dc, cx, cy+30);
+    c.fillStyle='#9fb0d0'; c.font='600 40px -apple-system, Segoe UI, sans-serif'; c.fillText('sur '+dur+' jours', cx, cy+95);
+    // habit
+    c.fillStyle='#ffffff'; c.font='700 60px -apple-system, Segoe UI, sans-serif';
+    wrapText(c, state.emo+'  '+state.name, W/2, 820, W-180, 70);
+    // streak highlight
+    roundRect(c, W/2-300, 980, 600, 150, 30); c.fillStyle='rgba(244,166,55,0.12)'; c.fill();
+    c.fillStyle='#f7c26b'; c.font='800 92px -apple-system, Segoe UI, sans-serif'; c.fillText('🔥 '+st, W/2, 1075);
+    c.fillStyle='#eaf0fb'; c.font='600 34px -apple-system, Segoe UI, sans-serif'; c.fillText((st>1?'jours':'jour')+' d\'affilée', W/2, 1120);
+    // motivational line
+    c.fillStyle='#cdd8ee'; c.font='italic 40px Georgia, serif';
+    var line = dc>=dur? 'Défi terminé. Respect. 🏆' : (st>=7? 'La série tient. On lâche rien.' : (dc<=1?'Le plus dur, c\'est de commencer. C\'est fait.':'Un jour de plus. C\'est ça, la discipline.'));
+    wrapText(c, line, W/2, 1260, W-200, 54);
+    // mini calendar strip (last up-to 30)
+    var cols=Math.min(dur,15), rows=Math.ceil(dur/cols), cw=48, gap=14, tot=cols*cw+(cols-1)*gap, sx=(W-tot)/2, sy=1430;
+    for(var i=0;i<dur;i++){ var r=Math.floor(i/cols), col=i%cols; var x=sx+col*(cw+gap), y=sy+r*(cw+gap);
+      var iso=addDays(state.start,i); roundRect(c,x,y,cw,cw,12);
+      if(isChecked(iso)){ c.fillStyle='#37c46e'; } else { c.fillStyle='rgba(255,255,255,0.07)'; } c.fill(); }
+    // footer
+    c.fillStyle='#9fb0d0'; c.font='700 34px -apple-system, Segoe UI, sans-serif';
+    c.fillText('focuslabboutique.fr/app', W/2, H-120);
+    c.fillStyle='#6b7ba0'; c.font='500 26px -apple-system, Segoe UI, sans-serif';
+    c.fillText('Ton défi discipline, gratuit', W/2, H-78);
+  }
+  function wrapText(c,text,x,y,maxW,lh){
+    var words=text.split(' '), line='', yy=y;
+    for(var i=0;i<words.length;i++){ var test=line+words[i]+' ';
+      if(c.measureText(test).width>maxW && i>0){ c.fillText(line.trim(),x,yy); line=words[i]+' '; yy+=lh; }
+      else line=test; }
+    c.fillText(line.trim(),x,yy);
+  }
+  function canvasBlob(cb){ $('shareCanvas').toBlob(cb,'image/png'); }
+  $('btnDownload').addEventListener('click',function(){
+    canvasBlob(function(b){ var u=URL.createObjectURL(b); var a=document.createElement('a'); a.href=u; a.download='discipline30-jour'+doneCount()+'.png'; a.click(); setTimeout(function(){URL.revokeObjectURL(u);},1000); });
+  });
+  $('btnShareNow').addEventListener('click',function(){
+    canvasBlob(function(b){
+      var file=new File([b],'discipline30.png',{type:'image/png'});
+      var txt='Jour '+doneCount()+'/'+state.dur+' de mon défi "'+state.name+'" 🔥 avec Discipline 30 → focuslabboutique.fr/app';
+      if(navigator.canShare && navigator.canShare({files:[file]})){
+        navigator.share({files:[file],text:txt}).catch(function(){});
+      } else { navigator.clipboard&&navigator.clipboard.writeText(txt); toast('Texte copié — télécharge l\'image pour la poster'); }
+    });
+  });
+
+  /* ---- reminder (best-effort, honnête) ---- */
+  function syncRemUI(){
+    var r=state&&state.reminder; $('remTime').value=(r&&r.time)||'19:00';
+    $('remState').textContent = r&&r.on ? ('Rappel activé à '+r.time+' (fonctionne app ouverte / installée).') : 'Rappel désactivé.';
+  }
+  $('btnRemOn').addEventListener('click',function(){
+    if(!state){toast('Lance d\'abord un défi');return;}
+    var t=$('remTime').value||'19:00';
+    function set(){ state.reminder={on:true,time:t}; save(); syncRemUI(); toast('Rappel activé à '+t); }
+    if('Notification' in window && Notification.permission!=='granted'){ Notification.requestPermission().then(function(p){ set(); }); }
+    else set();
+  });
+  $('btnRemOff').addEventListener('click',function(){ if(state){state.reminder={on:false,time:($('remTime').value||'19:00')};save();syncRemUI();toast('Rappel désactivé');} });
+  function checkReminder(){
+    var r=state&&state.reminder; if(!r||!r.on)return; if(isChecked(todayISO()))return;
+    if(!('Notification'in window)||Notification.permission!=='granted')return;
+    var now=new Date(), hm=String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
+    var lastKey='fl_remlast'; if(hm>=r.time && localStorage.getItem(lastKey)!==todayISO()){
+      localStorage.setItem(lastKey,todayISO());
+      try{ new Notification('Discipline 30 🔥',{body:'Tu n\'as pas encore validé "'+state.name+'" aujourd\'hui. On tient la série !',icon:'icon-192.png'}); }catch(e){}
+    }
+  }
+
+  /* ---- email capture (Web3Forms AJAX) ---- */
+  (function(){
+    var form=document.querySelector('.lead-capture-form'); if(!form)return;
+    form.addEventListener('submit',function(e){ e.preventDefault();
+      var btn=form.querySelector('button[type=submit]'), o=btn.textContent; btn.disabled=true; btn.textContent='Envoi…';
+      fetch(form.action,{method:'POST',headers:{'Accept':'application/json'},body:new FormData(form)})
+      .then(function(r){return r.json();}).then(function(j){ if(j&&j.success){ form.innerHTML='<p class="muted" style="margin:0">Merci ! Tu es sur la liste 🙌</p>'; } else throw 0; })
+      .catch(function(){ btn.disabled=false; btn.textContent=o; toast('Erreur, réessaie'); });
+    });
+  })();
+
+  /* ---- boot ---- */
+  if(state) show('home'); else { show('onboarding'); buildTemplates(); }
+  render(); checkReminder();
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ render(); checkReminder(); }});
+
+  /* ---- PWA service worker ---- */
+  if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
+})();
+</script>
+<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
+</body>
+</html>
