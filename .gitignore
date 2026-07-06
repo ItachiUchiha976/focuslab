@@ -1,4 +1,5 @@
-# Screenshots Playwright
+# Screenshots Playwright (dans le dossier screenshots/)
+screenshots/
 *.png
 *.jpg
 *.jpeg
@@ -15,3 +16,10 @@ node_modules/
 
 # OS
 Desktop.ini
+
+# MAIS ne pas ignorer les images produit dans img/
+!img/*.jpg
+!img/*.jpeg
+!img/*.png
+!img/*.mp4
+!img/*.webp
