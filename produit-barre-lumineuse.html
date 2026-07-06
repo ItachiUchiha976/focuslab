@@ -66,18 +66,20 @@
 
       <!-- Visuel produit -->
       <div class="product-page__img-wrap img-lightbar">
-        <img id="main-product-img" src="img/barre-lumineuse-ecran.jpg" alt="Barre lumineuse d'&#233;cran FocusLab pos&#233;e sur un moniteur" loading="eager">
-        <div class="thumbnails">
-          <div class="thumbnail active" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:68px;height:68px;margin:4px;">
-            <img src="img/barre-lumineuse-angle2.jpg" alt="Angle 2" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
-          </div>
-          <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:68px;height:68px;margin:4px;">
+        <img id="main-product-img" src="img/barre-lumineuse-ecran.jpg" alt="Barre lumineuse d'&#233;cran FocusLab pos&#233;e sur un moniteur" loading="eager"><div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:68px;height:68px;margin:4px;">
             <img src="img/barre-lumineuse-angle3.jpg" alt="Angle 3" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           </div>
           <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:68px;height:68px;margin:4px;">
             <img src="img/barre-lumineuse-angle4.jpg" alt="Sur bureau" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
           </div>
         </div>
+      
+        <div class="thumbnails">
+          <div class="thumbnail active" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/barre-lumineuse-ecran.png" alt="Vue 2" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+
       </div>
 
       <!-- Informations produit -->
@@ -301,11 +303,10 @@
 <script src="cart.js"></script>
 <script src="bos-paypal.js"></script>
 
-<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
-<script>
+<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end --><script>
 // Miniatures cliquables
 (function(){
-  var main = document.querySelector('#main-product-img, [class*=gallery] img, [class*=product] img');
+  var main = document.querySelector('#main-product-img, .product-main-visual img, [class*="product-visual"] img, .product-gallery img, [class*=gallery] img');
   var thumbs = document.querySelectorAll('.thumbnail img');
   if (!main || thumbs.length === 0) return;
   thumbs.forEach(function(t){

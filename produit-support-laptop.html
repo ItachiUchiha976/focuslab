@@ -66,6 +66,25 @@
       <!-- Image -->
       <div class="product-page__img-wrap img-stand">
         <img id="main-product-img" src="img/support-laptop-focuslab.jpg" alt="Support Laptop Aluminium FocusLab avec un MacBook posé dessus sur un bureau" loading="lazy">
+      
+        <div class="thumbnails">
+          <div class="thumbnail active" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/focuslab_real_01.jpg" alt="Vue 2" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/focuslab_real_02.jpg" alt="Vue 3" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/focuslab_real_03.jpg" alt="Vue 4" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/focuslab_real_04.jpg" alt="Vue 5" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+          <div class="thumbnail" style="position:relative;overflow:hidden;border-radius:10px;display:inline-block;width:72px;height:72px;margin:4px;">
+            <img src="img/focuslab_real_05.jpg" alt="Vue 6" loading="lazy" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover">
+          </div>
+        </div>
+
       </div>
 
       <!-- Info -->
@@ -233,11 +252,10 @@
 <script src="cart.js"></script>
 <script src="bos-paypal.js"></script>
 
-<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
-<script>
+<!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end --><script>
 // Miniatures cliquables
 (function(){
-  var main = document.querySelector('#main-product-img, [class*=gallery] img, [class*=product] img');
+  var main = document.querySelector('#main-product-img, .product-main-visual img, [class*="product-visual"] img, .product-gallery img, [class*=gallery] img');
   var thumbs = document.querySelectorAll('.thumbnail img');
   if (!main || thumbs.length === 0) return;
   thumbs.forEach(function(t){
