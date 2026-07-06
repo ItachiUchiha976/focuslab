@@ -252,8 +252,6 @@ p  { color:var(--text-med); line-height:1.75; }
   box-shadow: 0 0 80px rgba(245,158,11,0.15), 0 20px 50px rgba(0,0,0,0.5);
   aspect-ratio:1/1;
   object-fit:contain;
-  background: radial-gradient(circle at center, rgba(30,30,50,0.9) 0%, rgba(10,15,30,0.95) 100%);
-  padding: 20px;
 }
 /* gardés pour compatibilité (non utilisés) */
 .hero-mockup { display:none; }
