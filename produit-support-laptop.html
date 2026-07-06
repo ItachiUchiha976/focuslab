@@ -65,7 +65,7 @@
     <div class="product-page__grid">
       <!-- Image -->
       <div class="product-page__img-wrap img-stand">
-        <img src="img/support-laptop-focuslab.jpg" alt="Support Laptop Aluminium FocusLab avec un MacBook posé dessus sur un bureau" loading="lazy">
+        <img id="main-product-img" src="img/support-laptop-focuslab.jpg" alt="Support Laptop Aluminium FocusLab avec un MacBook posé dessus sur un bureau" loading="lazy">
       </div>
 
       <!-- Info -->
@@ -234,5 +234,23 @@
 <script src="bos-paypal.js"></script>
 
 <!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
+<script>
+// Miniatures cliquables
+(function(){
+  var main = document.querySelector('#main-product-img, [class*=gallery] img, [class*=product] img');
+  var thumbs = document.querySelectorAll('.thumbnail img');
+  if (!main || thumbs.length === 0) return;
+  thumbs.forEach(function(t){
+    t.style.cursor = 'pointer';
+    t.parentElement.addEventListener('click', function(){
+      var tmp = main.src; main.src = t.src; t.src = tmp;
+      document.querySelectorAll('.thumbnail').forEach(function(el){ el.classList.remove('active'); });
+      t.parentElement.classList.add('active');
+      main.style.opacity = '0.4'; main.style.transition = 'opacity .15s ease';
+      setTimeout(function(){ main.style.opacity = '1'; }, 150);
+    });
+  });
+})();
+</script>
 </body>
 </html>
