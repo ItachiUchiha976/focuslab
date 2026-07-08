@@ -104,6 +104,18 @@ p  { color:var(--text-med); line-height:1.75; }
 .btn--secondary:hover { background:var(--blue-pale); }
 .btn--amber { background:var(--amber); color:#fff; }
 .btn--amber:hover { background:var(--amber-dark); transform:translateY(-2px); box-shadow:0 8px 24px rgba(245,158,11,.4); }
+/* Bouton Ajouter au panier — bien visible */
+.add-to-cart-btn, #add-to-cart-btn {
+  display:block; width:100%; max-width:440px; margin:0 auto;
+  padding:16px 32px; font-size:1.1rem; font-weight:700;
+  background:var(--amber); color:#fff; border:none;
+  border-radius:12px; cursor:pointer; transition:all .2s;
+  letter-spacing:0.3px;
+}
+.add-to-cart-btn:hover, #add-to-cart-btn:hover {
+  background:var(--amber-dark); transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(245,158,11,.4);
+}
 .btn--dark { background:var(--dark); color:#fff; }
 .btn--dark:hover { background:var(--dark-med); transform:translateY(-2px); }
 .btn--ghost { background:rgba(255,255,255,.15); color:#fff; border:2px solid rgba(255,255,255,.3); }
