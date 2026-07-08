@@ -122,8 +122,27 @@ function renderCartPage() {
     </div>
   `).join('');
   const subtotal = cartTotal();
+  // -10% automatique sur le produit le plus cher
+  const cart = getCart();
+  const maxPrice = cart.length > 0 ? Math.max(...cart.map(i => i.price)) : 0;
+  const discount = maxPrice * 0.10;
+  const total = subtotal - discount;
   document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
-  document.getElementById('cart-total') && (document.getElementById('cart-total').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
+  const totalEl = document.getElementById('cart-total');
+  if (discount > 0 && totalEl) {
+    totalEl.innerHTML = '<span style="text-decoration:line-through;color:#9ca3af;font-size:14px;margin-right:8px">' + subtotal.toFixed(2).replace('.',',') + ' €</span><span style="color:#10b981">' + total.toFixed(2).replace('.',',') + ' €</span>';
+    const promoEl = document.getElementById('cart-promo');
+    if (!promoEl) {
+      const p = document.createElement('div');
+      p.id = 'cart-promo';
+      p.style.cssText = 'background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:6px 12px;margin-bottom:8px;text-align:center;font-size:13px;color:#166534;font-weight:600';
+      p.textContent = '🎉 -10% appliqué sur le produit le + cher';
+      const summary = document.querySelector('.cart-summary');
+      if (summary) summary.insertBefore(p, summary.firstChild);
+    }
+  } else if (totalEl) {
+    totalEl.textContent = total.toFixed(2).replace('.',',') + ' €';
+  }
 }
 
 function getProductEmoji(id) {
