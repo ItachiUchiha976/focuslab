@@ -754,3 +754,8 @@ p  { color:var(--text-med); line-height:1.75; }
 .img-lightbar  { background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 55%, #1d4ed8 100%); }
 .img-posture   { background: linear-gradient(135deg, #3b0764 0%, #7c3aed 100%); }
 .img-earplugs  { background: linear-gradient(135deg, #0c4a6e 0%, #0284c7 100%); }
+
+.cart-item__qty { display:flex; align-items:center; gap:8px; margin-top:8px; }
+.cart-item__qty .qty-btn { width:30px; height:30px; border:1px solid var(--border); background:var(--white); border-radius:6px; cursor:pointer; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; }
+.cart-item__qty .qty-btn:hover { background:var(--bg-light); }
+

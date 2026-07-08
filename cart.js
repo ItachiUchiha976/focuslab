@@ -116,9 +116,9 @@ function renderCartPage() {
       <div class="cart-item__info">
         <div class="cart-item__name">${item.name}</div>
         <div class="cart-item__price">${(item.price).toFixed(2).replace('.',',')} €</div>
-        <div style="font-size:.8rem;color:var(--text-light)">Qté : ${item.qty}</div>
+        <div class="cart-item__qty"><button class="qty-btn" onclick="changeQty('${item.id}', -1); renderCartPage();">−</button><span>${item.qty}</span><button class="qty-btn" onclick="changeQty('${item.id}', 1); renderCartPage();">+</button></div>
       </div>
-      <button class="cart-item__remove" onclick="removeFromCart('${item.id}'); renderCartPage();" aria-label="Supprimer">Supprimer</button>
+      <button class="cart-item__remove" onclick="removeFromCart('${item.id}'); renderCartPage();" aria-label="Supprimer">✕</button>
     </div>
   `).join('');
   const subtotal = cartTotal();
@@ -242,4 +242,14 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   });
 });
+
+
+function changeQty(id, delta) {
+  const cart = getCart();
+  const item = cart.find(i => i.id === id);
+  if (!item) return;
+  item.qty += delta;
+  if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
+  saveCart(cart);
+}
 
