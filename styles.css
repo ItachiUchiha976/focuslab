@@ -759,3 +759,7 @@ p  { color:var(--text-med); line-height:1.75; }
 .cart-item__qty .qty-btn { width:30px; height:30px; border:1px solid var(--border); background:var(--white); border-radius:6px; cursor:pointer; font-size:16px; font-weight:700; display:flex; align-items:center; justify-content:center; }
 .cart-item__qty .qty-btn:hover { background:var(--bg-light); }
 
+
+.review-img { border-radius:12px; margin-bottom:12px; object-fit:cover; }
+.review-card { display:flex; flex-direction:column; align-items:center; text-align:center; }
+
