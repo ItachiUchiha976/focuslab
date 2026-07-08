@@ -123,7 +123,6 @@ function renderCartPage() {
   `).join('');
   const subtotal = cartTotal();
   // -10% automatique sur le produit le plus cher
-  const cart = getCart();
   const maxPrice = cart.length > 0 ? Math.max(...cart.map(i => i.price)) : 0;
   const discount = maxPrice * 0.10;
   const total = subtotal - discount;
