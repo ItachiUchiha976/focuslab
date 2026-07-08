@@ -226,3 +226,21 @@ function showFormSuccess(form) {
 
 /* BOS — expose panier pour checkout PayPal cross-page (fix isolation cart multi-boutique, 01/07/2026) */
 try { window.getCart = getCart; window.BOS_CART_KEY = CART_KEY; } catch (e) {}
+
+// BOS — listener data-add-cart (toutes les pages produit)
+document.addEventListener("DOMContentLoaded", function() {
+  document.querySelectorAll("[data-add-cart]").forEach(function(btn) {
+    if (btn._bosBound) return; // éviter double binding
+    btn._bosBound = true;
+    btn.addEventListener("click", function(e) {
+      e.preventDefault();
+      var id = this.dataset.id;
+      var name = this.dataset.name;
+      var price = parseFloat(this.dataset.price);
+      if (id && name && price) {
+        addToCart(id, name, price);
+      }
+    });
+  });
+});
+
