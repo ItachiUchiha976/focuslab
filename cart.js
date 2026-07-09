@@ -77,9 +77,9 @@ function initMobileMenu() {
   const menu = document.querySelector('.mobile-menu');
   const close = document.querySelector('.mobile-menu__close');
   if (!btn || !menu) return;
-  btn.addEventListener('click', () => { menu.classList.add('open'); btn.setAttribute('aria-expanded','true'); });
-  close && close.addEventListener('click', () => { menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => menu.classList.remove('open')));
+  btn.addEventListener('click', () => { menu.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow = 'hidden'; /* BOS 09/07/2026 */ });
+  close && close.addEventListener('click', () => { menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow = ''; /* BOS 09/07/2026 */ });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); document.body.style.overflow = ''; /* BOS 09/07/2026 */ }));
 }
 
 /* ---- Quantity selector ---- */
@@ -116,32 +116,14 @@ function renderCartPage() {
       <div class="cart-item__info">
         <div class="cart-item__name">${item.name}</div>
         <div class="cart-item__price">${(item.price).toFixed(2).replace('.',',')} €</div>
-        <div class="cart-item__qty"><button class="qty-btn" onclick="changeQty('${item.id}', -1); renderCartPage();">−</button><span>${item.qty}</span><button class="qty-btn" onclick="changeQty('${item.id}', 1); renderCartPage();">+</button></div>
+        <div style="font-size:.8rem;color:var(--text-light)">Qté : ${item.qty}</div>
       </div>
-      <button class="cart-item__remove" onclick="removeFromCart('${item.id}'); renderCartPage();" aria-label="Supprimer">✕</button>
+      <button class="cart-item__remove" onclick="removeFromCart('${item.id}'); renderCartPage();" aria-label="Supprimer">Supprimer</button>
     </div>
   `).join('');
   const subtotal = cartTotal();
-  // -10% automatique sur le produit le plus cher
-  const maxPrice = cart.length > 0 ? Math.max(...cart.map(i => i.price)) : 0;
-  const discount = maxPrice * 0.10;
-  const total = subtotal - discount;
   document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
-  const totalEl = document.getElementById('cart-total');
-  if (discount > 0 && totalEl) {
-    totalEl.innerHTML = '<span style="text-decoration:line-through;color:#9ca3af;font-size:14px;margin-right:8px">' + subtotal.toFixed(2).replace('.',',') + ' €</span><span style="color:#10b981">' + total.toFixed(2).replace('.',',') + ' €</span>';
-    const promoEl = document.getElementById('cart-promo');
-    if (!promoEl) {
-      const p = document.createElement('div');
-      p.id = 'cart-promo';
-      p.style.cssText = 'background:#f0fdf4;border:1px solid #bbf7d0;border-radius:8px;padding:6px 12px;margin-bottom:8px;text-align:center;font-size:13px;color:#166534;font-weight:600';
-      p.textContent = '🎉 -10% appliqué sur le produit le + cher';
-      const summary = document.querySelector('.cart-summary');
-      if (summary) summary.insertBefore(p, summary.firstChild);
-    }
-  } else if (totalEl) {
-    totalEl.textContent = total.toFixed(2).replace('.',',') + ' €';
-  }
+  document.getElementById('cart-total') && (document.getElementById('cart-total').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
 }
 
 function getProductEmoji(id) {
@@ -225,31 +207,3 @@ function showFormSuccess(form) {
 
 /* BOS — expose panier pour checkout PayPal cross-page (fix isolation cart multi-boutique, 01/07/2026) */
 try { window.getCart = getCart; window.BOS_CART_KEY = CART_KEY; } catch (e) {}
-
-// BOS — listener data-add-cart (toutes les pages produit)
-document.addEventListener("DOMContentLoaded", function() {
-  document.querySelectorAll("[data-add-cart]").forEach(function(btn) {
-    if (btn._bosBound) return; // éviter double binding
-    btn._bosBound = true;
-    btn.addEventListener("click", function(e) {
-      e.preventDefault();
-      var id = this.dataset.id;
-      var name = this.dataset.name;
-      var price = parseFloat(this.dataset.price);
-      if (id && name && price) {
-        addToCart(id, name, price);
-      }
-    });
-  });
-});
-
-
-function changeQty(id, delta) {
-  const cart = getCart();
-  const item = cart.find(i => i.id === id);
-  if (!item) return;
-  item.qty += delta;
-  if (item.qty <= 0) cart.splice(cart.indexOf(item), 1);
-  saveCart(cart);
-}
-
