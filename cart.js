@@ -77,9 +77,10 @@ function initMobileMenu() {
   const menu = document.querySelector('.mobile-menu');
   const close = document.querySelector('.mobile-menu__close');
   if (!btn || !menu) return;
-  btn.addEventListener('click', () => { menu.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow = 'hidden'; /* BOS 09/07/2026 */ });
-  close && close.addEventListener('click', () => { menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow = ''; /* BOS 09/07/2026 */ });
-  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); document.body.style.overflow = ''; /* BOS 09/07/2026 */ }));
+  /* BOS 09/07/2026 — bloque défilement page robuste (mobile + desktop) */
+  btn.addEventListener('click', () => { menu.classList.add('open'); btn.setAttribute('aria-expanded','true'); document.body.style.overflow = 'hidden'; document.documentElement.style.overflow = 'hidden'; document.body.style.position = 'fixed'; document.body.style.width = '100%'; });
+  close && close.addEventListener('click', () => { menu.classList.remove('open'); btn.setAttribute('aria-expanded','false'); document.body.style.overflow = ''; document.documentElement.style.overflow = ''; document.body.style.position = ''; document.body.style.width = ''; });
+  menu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => { menu.classList.remove('open'); document.body.style.overflow = ''; document.documentElement.style.overflow = ''; document.body.style.position = ''; document.body.style.width = ''; }));
 }
 
 /* ---- Quantity selector ---- */
