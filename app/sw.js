@@ -1,5 +1,5 @@
-/* Discipline 30 — FocusLab · service worker (offline-first pour l'app shell) */
-var CACHE = 'discipline30-v3';
+/* Discipline 30 — FocusLab · service worker (network-first, cache = secours hors-ligne) */
+var CACHE = 'discipline30-v4';
 var ASSETS = [
   './',
   './index.html',
@@ -22,13 +22,11 @@ self.addEventListener('fetch', function(e){
   var url = new URL(req.url);
   // ne pas mettre en cache l'analytics ni les POST externes
   if(url.origin!==location.origin){ return; }
+  // network-first : la mise à jour se propage toujours ; le cache ne sert qu'en hors-ligne
   e.respondWith(
-    caches.match(req).then(function(cached){
-      var net = fetch(req).then(function(res){
-        if(res && res.status===200){ var copy=res.clone(); caches.open(CACHE).then(function(c){c.put(req,copy);}); }
-        return res;
-      }).catch(function(){ return cached; });
-      return cached || net;
-    })
+    fetch(req).then(function(res){
+      if(res && res.status===200){ var copy=res.clone(); caches.open(CACHE).then(function(c){c.put(req,copy);}); }
+      return res;
+    }).catch(function(){ return caches.match(req); })
   );
 });

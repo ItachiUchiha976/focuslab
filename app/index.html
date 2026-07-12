@@ -80,6 +80,22 @@
   .cal .d.today{outline:2px solid var(--accent);outline-offset:1px;color:var(--text)}
   .cal .d.future{opacity:.45}
   .cal .d.missed{background:transparent;border-style:dashed;color:#6b7ba0}
+  .cal .d.frozen{background:linear-gradient(180deg,#7fc4f7,#3f8fd6);color:#06233a;border-color:transparent;font-weight:800}
+  /* Légende + stats visuelles */
+  .legend{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px;font-size:11px;color:var(--muted)}
+  .legend .sq{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:5px;vertical-align:-1px;border:1px solid var(--line)}
+  .legend .sq.done{background:#37c46e;border-color:transparent}
+  .legend .sq.frozen{background:#3f8fd6;border-color:transparent}
+  .legend .sq.missed{background:transparent;border-style:dashed}
+  .legend .sq.future{background:var(--panel2);opacity:.5}
+  .stats-row{display:flex;gap:10px;margin-top:14px}
+  .stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
+  .stat b{display:block;font-size:20px;line-height:1.2;color:var(--accent2)}
+  .stat span{font-size:11px;color:var(--muted)}
+  /* Confettis + palier */
+  #confettiCv{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:120;display:none}
+  .mile-sheet{text-align:center}
+  .mile-sheet .big{font-size:58px;line-height:1;margin:6px 0 10px}
   /* success banner */
   .toast{position:fixed;left:50%;bottom:calc(96px + env(safe-area-inset-bottom));transform:translateX(-50%);background:#0f1a30;border:1px solid var(--accent);color:var(--text);padding:12px 18px;border-radius:14px;font-weight:600;z-index:60;opacity:0;transition:opacity .2s;pointer-events:none;box-shadow:0 12px 30px rgba(0,0,0,.4)}
   .toast.show{opacity:1}
@@ -174,6 +190,17 @@
 
     <div class="card">
       <div class="cal" id="cal"></div>
+      <div class="legend">
+        <span><i class="sq done"></i>Fait</span>
+        <span><i class="sq frozen"></i>Gelé 🧊</span>
+        <span><i class="sq missed"></i>Raté</span>
+        <span><i class="sq future"></i>À venir</span>
+      </div>
+      <div class="stats-row">
+        <div class="stat"><b id="statRate">—</b><span>Taux de réussite</span></div>
+        <div class="stat"><b id="statBest">0</b><span>Meilleure série</span></div>
+        <div class="stat"><b id="statFreeze">0/2</b><span>Gels en réserve</span></div>
+      </div>
     </div>
 
     <div class="card xsell" id="xsell">
@@ -218,7 +245,7 @@
     <button class="close-x" data-close>×</button>
     <h2>Réglages</h2>
     <label class="lbl">Rappel quotidien</label>
-    <input type="time" class="field" id="remTime" value="19:00">
+    <input type="time" class="field" id="remTime" value="20:00">
     <div class="row" style="margin-top:10px">
       <button class="btn btn--ghost btn--sm" id="btnRemOn">Activer le rappel</button>
       <button class="btn btn--ghost btn--sm" id="btnRemOff">Désactiver</button>
@@ -243,9 +270,23 @@
 
     <label class="lbl" style="margin-top:18px">Défi en cours</label>
     <button class="btn btn--ghost btn--sm" id="btnReset" style="width:auto">Abandonner & recommencer</button>
-    <p class="muted" style="font-size:12px;margin-top:14px">Version 1.0 · <a href="../index.html">focuslabboutique.fr</a></p>
+    <p class="muted" style="font-size:12px;margin-top:14px">Version 1.1 · <a href="../index.html">focuslabboutique.fr</a></p>
   </div>
 </div>
+
+<!-- MILESTONE MODAL -->
+<div class="modal" id="mileModal">
+  <div class="sheet mile-sheet">
+    <button class="close-x" data-close>×</button>
+    <div class="big" id="mileEmo">🎖️</div>
+    <h2 id="mileTitle">Palier atteint !</h2>
+    <p id="mileMsg"></p>
+    <button class="btn btn--amber" id="btnMileShare" style="margin-bottom:8px">📸 Partager ma carte</button>
+    <button class="btn btn--ghost btn--sm" data-close>Je continue 💪</button>
+  </div>
+</div>
+
+<canvas id="confettiCv"></canvas>
 
 <div class="toast" id="toast"></div>
 
@@ -264,11 +305,20 @@
     {emo:'✍️',name:'Écrire 3 lignes'},
     {emo:'🎯',name:'Mon défi perso'}
   ];
-  var state=load();
+  var MAX_FREEZE=2;                      // stock maxi de gèle-série (standard Duolingo)
+  var state=migrate(load());
   var pick={emo:'🎯',name:'',dur:30};
 
   /* ---- storage ---- */
   function load(){ try{return JSON.parse(localStorage.getItem(KEY))||null;}catch(e){return null;} }
+  function migrate(s){ // migration douce : ajoute les nouveaux champs sans toucher aux données existantes
+    if(!s) return s;
+    s.checks=s.checks||{};
+    s.frozen=s.frozen||{};
+    s.freezes=(typeof s.freezes==='number' && s.freezes>=0)?Math.min(s.freezes,MAX_FREEZE):0;
+    s.freezeAwards=s.freezeAwards||{};   // jours où un gel a déjà été gagné (anti double-gain)
+    return s;
+  }
   function save(){ localStorage.setItem(KEY,JSON.stringify(state)); }
   function todayISO(d){ d=d||new Date(); return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0'); }
   function addDays(iso,n){ var p=iso.split('-'); var d=new Date(+p[0],+p[1]-1,+p[2]); d.setDate(d.getDate()+n); return todayISO(d); }
@@ -287,6 +337,15 @@
     if(!isEffectivelyDone(t)) cur=addDays(t,-1); // streak still counts if today not done yet
     while(isEffectivelyDone(cur)){ n++; cur=addDays(cur,-1); if(n>2000)break; }
     return n;
+  }
+  function computeBestStreak(){ // meilleure série sur toute la durée écoulée du défi
+    if(!state) return 0;
+    var best=0, run=0, idx=dayIndex(), last=Math.min(idx,state.dur-1);
+    for(var i=0;i<=last;i++){
+      if(isEffectivelyDone(addDays(state.start,i))){ run++; if(run>best)best=run; }
+      else run=0;
+    }
+    return best;
   }
 
   /* ---- views ---- */
@@ -322,7 +381,7 @@
   $('btnStart').addEventListener('click',function(){
     var name=($('habName').value||'').trim();
     if(!name){ toast('Écris ton habitude 🙂'); $('habName').focus(); return; }
-    state={ emo:pick.emo||'🎯', name:name, dur:pick.dur||30, start:todayISO(), checks:{}, created:todayISO(), reminder:(state&&state.reminder)||null };
+    state={ emo:pick.emo||'🎯', name:name, dur:pick.dur||30, start:todayISO(), checks:{}, frozen:{}, freezes:0, freezeAwards:{}, created:todayISO(), reminder:(state&&state.reminder)||null };
     save(); render(); show('home'); toast('Défi lancé — à toi de jouer 🔥');
   });
 
@@ -342,7 +401,16 @@
     if(done){ b.textContent='✓ Validé aujourd\'hui — reviens demain'; b.disabled=true; b.className='btn btn--ghost'; }
     else { b.textContent='✓ J\'ai tenu aujourd\'hui'; b.disabled=false; b.className='btn btn--ok'; }
     buildCal();
+    renderStats();
     updateFreezeBtn();
+  }
+  function renderStats(){ // stats visuelles : taux de réussite + meilleure série + gels
+    if(!state) return;
+    var idx=dayIndex(), elapsed=Math.max(1,Math.min(idx+1,state.dur)), ok=0;
+    for(var i=0;i<elapsed;i++){ if(isEffectivelyDone(addDays(state.start,i))) ok++; }
+    $('statRate').textContent=Math.round(ok/elapsed*100)+'%';
+    $('statBest').textContent=computeBestStreak();
+    $('statFreeze').textContent=isPro()?'∞':(((state.freezes||0))+'/'+MAX_FREEZE);
   }
   function buildCal(){
     var cal=$('cal'); cal.innerHTML=''; var t=todayISO(), idx=dayIndex();
@@ -350,7 +418,7 @@
       var iso=addDays(state.start,i);
       var d=document.createElement('div'); d.className='d'; d.textContent=(i+1);
       if(isChecked(iso)) d.classList.add('done');
-      else if(isFrozen(iso)){ d.classList.add('done'); d.textContent='🧊'; }
+      else if(isFrozen(iso)){ d.classList.add('frozen'); d.textContent='🧊'; }
       else if(iso===t) d.classList.add('today');
       else if(i<idx) d.classList.add('missed');
       else if(i>idx) d.classList.add('future');
@@ -358,17 +426,69 @@
     }
   }
 
+  /* ---- célébrations : confettis (canvas léger, sans lib) ---- */
+  function confetti(n){
+    var cv=$('confettiCv'); if(!cv) return;
+    var c=cv.getContext('2d'); if(!c) return;
+    cv.width=window.innerWidth; cv.height=window.innerHeight; cv.style.display='block';
+    var cols=['#f4a637','#f7c26b','#49d67f','#5b8def','#e85d75','#eaf0fb'];
+    var ps=[], i;
+    for(i=0;i<n;i++){
+      ps.push({ x:Math.random()*cv.width, y:-20-Math.random()*cv.height*0.35,
+        w:5+Math.random()*6, vx:(Math.random()-.5)*2.4, vy:2+Math.random()*3.6,
+        rot:Math.random()*Math.PI, vr:(Math.random()-.5)*.28, col:cols[i%cols.length] });
+    }
+    var t0=Date.now();
+    (function frame(){
+      c.clearRect(0,0,cv.width,cv.height);
+      var alive=false;
+      for(var j=0;j<ps.length;j++){ var p=ps[j];
+        p.x+=p.vx; p.y+=p.vy; p.vy+=0.035; p.rot+=p.vr;
+        if(p.y<cv.height+24){ alive=true;
+          c.save(); c.translate(p.x,p.y); c.rotate(p.rot); c.fillStyle=p.col;
+          c.fillRect(-p.w/2,-p.w/2,p.w,p.w*0.62); c.restore(); }
+      }
+      if(alive && Date.now()-t0<3200) requestAnimationFrame(frame);
+      else { c.clearRect(0,0,cv.width,cv.height); cv.style.display='none'; }
+    })();
+    try{ if(navigator.vibrate) navigator.vibrate(n>=140?[40,60,40]:30); }catch(e){}
+  }
+
+  /* ---- paliers J7/J14/J21/J30 (messages motivants) ---- */
+  var MILESTONES={
+    7:{emo:'🎖️',t:'Jour 7 — une semaine entière !',m:'Une semaine complète de discipline. Ton habitude prend racine — la plupart des gens n\'arrivent jamais jusqu\'ici.'},
+    14:{emo:'💪',t:'Jour 14 — deux semaines !',m:'Deux semaines d\'affilée. Tu fais officiellement partie des rares qui tiennent. Le cap mythique des 21 jours approche.'},
+    21:{emo:'🧠',t:'Jour 21 — le cap mythique !',m:'21 jours : ton cerveau a intégré l\'habitude. À partir de maintenant, c\'est elle qui travaille pour toi.'},
+    30:{emo:'🏆',t:'Jour 30 — défi relevé !',m:'30 jours de discipline. Tu es la preuve vivante que la régularité paie. Partage ta carte — inspire quelqu\'un.'}
+  };
+  function openMilestone(dc){
+    var M=MILESTONES[dc]||{emo:'🏆',t:'Jour '+dc+' — défi terminé !',m:'Défi de '+state.dur+' jours relevé. Respect total. Partage ta carte !'};
+    $('mileEmo').textContent=M.emo; $('mileTitle').textContent=M.t; $('mileMsg').textContent=M.m;
+    $('mileModal').classList.add('show');
+  }
+  $('btnMileShare').addEventListener('click',function(){ $('mileModal').classList.remove('show'); openShare(); });
+
   /* ---- check today ---- */
   $('btnCheck').addEventListener('click',function(){
     if(!state)return; var t=todayISO();
-    state.checks=state.checks||{}; state.checks[t]=true; save(); render();
+    state.checks=state.checks||{}; state.checks[t]=true;
+    // 🧊 gain automatique : +1 gel tous les 7 jours consécutifs (max 2 en stock)
     var st=computeStreak();
-    toast(st>1?('🔥 '+st+' jours d\'affilée !'):'Bien joué, jour 1 posé 💪');
-    // milestone → propose share
-    var dc=doneCount();
-    if(dc===1||dc===7||dc===15||dc===21||dc===30||dc===state.dur||dc%10===0){
-      setTimeout(openShare,650);
+    state.freezeAwards=state.freezeAwards||{};
+    if(st>0 && st%7===0 && !state.freezeAwards[t]){
+      state.freezeAwards[t]=true;
+      if((state.freezes||0)<MAX_FREEZE){
+        state.freezes=(state.freezes||0)+1;
+        setTimeout(function(){ toast('🧊 +1 gel de série gagné — '+st+' jours d\'affilée !'); },1500);
+      }
     }
+    save(); render();
+    var dc=doneCount();
+    var isMile=MILESTONES[dc]||dc===state.dur;
+    confetti(isMile?160:70);
+    toast(st>1?('🔥 '+st+' jours d\'affilée !'):'Bien joué, jour 1 posé 💪');
+    if(isMile){ setTimeout(function(){ openMilestone(dc); },700); }
+    else if(dc===1||dc===15||dc%10===0){ setTimeout(openShare,650); }
   });
 
   /* ---- new / reset ---- */
@@ -388,7 +508,7 @@
   function toast(m){ var el=$('toast'); el.textContent=m; el.classList.add('show'); clearTimeout(toT); toT=setTimeout(function(){el.classList.remove('show');},2200); }
 
   /* ---- modals ---- */
-  function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); }
+  function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); $('mileModal').classList.remove('show'); }
   document.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')||e.target.classList.contains('modal')) closeModals(); });
   $('btnSettings').addEventListener('click',function(){ syncRemUI(); $('setModal').classList.add('show'); });
 
@@ -433,7 +553,7 @@
     var cols=Math.min(dur,15), rows=Math.ceil(dur/cols), cw=48, gap=14, tot=cols*cw+(cols-1)*gap, sx=(W-tot)/2, sy=1430;
     for(var i=0;i<dur;i++){ var r=Math.floor(i/cols), col=i%cols; var x=sx+col*(cw+gap), y=sy+r*(cw+gap);
       var iso=addDays(state.start,i); roundRect(c,x,y,cw,cw,12);
-      if(isChecked(iso)){ c.fillStyle='#37c46e'; } else { c.fillStyle='rgba(255,255,255,0.07)'; } c.fill(); }
+      if(isChecked(iso)){ c.fillStyle='#37c46e'; } else if(isFrozen(iso)){ c.fillStyle='#3f8fd6'; } else { c.fillStyle='rgba(255,255,255,0.07)'; } c.fill(); }
     // footer
     c.fillStyle='#9fb0d0'; c.font='700 34px -apple-system, Segoe UI, sans-serif';
     c.fillText('focuslabboutique.fr/app', W/2, H-120);
@@ -463,17 +583,17 @@
 
   /* ---- reminder (best-effort, honnête) ---- */
   function syncRemUI(){
-    var r=state&&state.reminder; $('remTime').value=(r&&r.time)||'19:00';
+    var r=state&&state.reminder; $('remTime').value=(r&&r.time)||'20:00';
     $('remState').textContent = r&&r.on ? ('Rappel activé à '+r.time+' (fonctionne app ouverte / installée).') : 'Rappel désactivé.';
   }
   $('btnRemOn').addEventListener('click',function(){
     if(!state){toast('Lance d\'abord un défi');return;}
-    var t=$('remTime').value||'19:00';
+    var t=$('remTime').value||'20:00';
     function set(){ state.reminder={on:true,time:t}; save(); syncRemUI(); try{scheduleNativeReminder();}catch(e){} toast('Rappel activé à '+t); }
     if('Notification' in window && Notification.permission!=='granted'){ Notification.requestPermission().then(function(p){ set(); }); }
     else set();
   });
-  $('btnRemOff').addEventListener('click',function(){ if(state){state.reminder={on:false,time:($('remTime').value||'19:00')};save();syncRemUI();try{scheduleNativeReminder();}catch(e){}toast('Rappel désactivé');} });
+  $('btnRemOff').addEventListener('click',function(){ if(state){state.reminder={on:false,time:($('remTime').value||'20:00')};save();syncRemUI();try{scheduleNativeReminder();}catch(e){}toast('Rappel désactivé');} });
   function checkReminder(){
     var r=state&&state.reminder; if(!r||!r.on)return; if(isChecked(todayISO()))return;
     if(!('Notification'in window)||Notification.permission!=='granted')return;
@@ -553,20 +673,39 @@
     if(idx<0 || idx>=state.dur) return false;
     return !isEffectivelyDone(y);
   }
-  function grantFreezeToYesterday(){ state.frozen=state.frozen||{}; state.frozen[addDays(todayISO(),-1)]=true; save(); render(); toast('🧊 Série sauvée !'); }
-  function stockFreeze(){ state.freezes=(state.freezes||0)+1; save(); updateFreezeBtn(); toast('🧊 +1 gèle-série en réserve'); }
-  function maybeAutoFreeze(){
-    if(!state) return;
-    if(yesterdayMissed()){
-      if(isPro()) grantFreezeToYesterday();
-      else if((state.freezes||0)>0){ state.freezes--; grantFreezeToYesterday(); }
+  function grantFreezeToYesterday(){ state.frozen=state.frozen||{}; state.frozen[addDays(todayISO(),-1)]=true; save(); render(); toast('🧊 Gel utilisé ! Série sauvée'); }
+  function stockFreeze(){
+    if((state.freezes||0)>=MAX_FREEZE){ toast('🧊 Réserve pleine ('+MAX_FREEZE+' gels max)'); return; }
+    state.freezes=(state.freezes||0)+1; save(); updateFreezeBtn(); renderStats(); toast('🧊 +1 gèle-série en réserve');
+  }
+  function missedGap(){ // jours ratés consécutifs se terminant hier (le trou à combler pour garder la série)
+    if(!state) return [];
+    var gap=[], cur=addDays(todayISO(),-1);
+    while(cur>=state.start && gap.length<=MAX_FREEZE+1){
+      var ix=dayIndexOf(cur);
+      if(ix<0||ix>=state.dur) break;
+      if(isEffectivelyDone(cur)) break;
+      gap.push(cur); cur=addDays(cur,-1);
     }
+    return gap;
+  }
+  function maybeAutoFreeze(){ // un jour raté consomme automatiquement un gel au lieu de casser la série
+    if(!state) return;
+    var gap=missedGap(); if(!gap.length) return;
+    state.frozen=state.frozen||{};
+    if(isPro()){ gap.forEach(function(d){ state.frozen[d]=true; }); save(); toast('🧊 Gel utilisé ! Série sauvée'); return; }
+    if((state.freezes||0)>=gap.length){
+      state.freezes-=gap.length;
+      gap.forEach(function(d){ state.frozen[d]=true; });
+      save(); toast('🧊 Gel utilisé ! Série sauvée');
+    }
+    // pas assez de gels pour tout le trou → on garde la réserve (la série est déjà cassée), le bouton propose la pub
   }
   function updateFreezeBtn(){
     var b=$('btnFreeze'); if(!b) return;
     var res=(state&&state.freezes)||0;
     if(yesterdayMissed()){ b.classList.add('urgent'); b.innerHTML='🧊 Sauver ma série (tu as raté hier)'; }
-    else { b.classList.remove('urgent'); b.innerHTML='🧊 Gèle-série'+(res>0?(' · '+res+' en réserve'):''); }
+    else { b.classList.remove('urgent'); b.innerHTML='🧊 Gèle-série · '+(isPro()?'illimité ✨':(res+'/'+MAX_FREEZE+' en réserve')); }
   }
   $('btnFreeze').addEventListener('click',function(){
     if(!state){ toast('Lance d\'abord un défi 🙂'); return; }
@@ -577,6 +716,7 @@
       showRewarded(grantFreezeToYesterday);
     } else {
       if(isPro()){ toast('Pro : ta série est déjà protégée ✨'); return; }
+      if((state.freezes||0)>=MAX_FREEZE){ toast('🧊 Réserve pleine ('+MAX_FREEZE+' gels max) — elle servira si tu rates un jour'); return; }
       if(AdMob){ toast('Regarde une courte pub pour +1 gèle-série 🧊'); }
       showRewarded(stockFreeze);
     }
@@ -606,7 +746,8 @@
   render(); checkReminder();
   admobInit();
   scheduleNativeReminder();
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ render(); checkReminder(); }});
+  setInterval(checkReminder, 60000); // rappel local : vérifié chaque minute quand l'app est ouverte
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ maybeAutoFreeze(); render(); checkReminder(); }});
 
   /* ---- PWA service worker ---- */
   if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
