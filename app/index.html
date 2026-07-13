@@ -27,7 +27,7 @@
     color:var(--text); min-height:100vh; min-height:100dvh;
     -webkit-font-smoothing:antialiased;
   }
-  .wrap{max-width:520px;margin:0 auto;padding:0 18px calc(120px + env(safe-area-inset-bottom))}
+  .wrap{max-width:520px;margin:0 auto;padding:0 18px calc(120px + var(--safe-ad,0px) + env(safe-area-inset-bottom))}
   a{color:var(--accent2)}
   /* Header */
   header.app{display:flex;align-items:center;justify-content:space-between;padding:18px 4px 10px}
@@ -92,6 +92,17 @@
   .stat{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 6px;text-align:center}
   .stat b{display:block;font-size:20px;line-height:1.2;color:var(--accent2)}
   .stat span{font-size:11px;color:var(--muted)}
+  /* Badges de progression J7/J14/J21/J30 */
+  .badges-row{display:flex;gap:8px;margin-top:12px}
+  .badge{flex:1;background:var(--panel2);border:1px solid var(--line);border-radius:12px;padding:10px 4px;text-align:center;opacity:.35;filter:grayscale(1);transition:opacity .25s ease,filter .25s ease}
+  .badge .ic{display:block;font-size:22px;line-height:1}
+  .badge .lb{display:block;font-size:10px;color:var(--muted);font-weight:700;margin-top:4px;letter-spacing:.5px}
+  .badge.unlocked{opacity:1;filter:none;border-color:var(--accent)}
+  /* Stats avancées (Pro) */
+  .adv-stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+  .adv-stats .stat{padding:12px 6px}
+  .locked-row{display:flex;align-items:center;justify-content:space-between;gap:10px;background:var(--panel2);border:1px dashed var(--line);border-radius:12px;padding:12px 14px;margin-top:10px;cursor:pointer}
+  .locked-row span{font-size:13px;color:var(--muted)}
   /* Confettis + palier */
   #confettiCv{position:fixed;inset:0;width:100vw;height:100vh;pointer-events:none;z-index:120;display:none}
   .mile-sheet{text-align:center}
@@ -201,6 +212,12 @@
         <div class="stat"><b id="statBest">0</b><span>Meilleure série</span></div>
         <div class="stat"><b id="statFreeze">0/2</b><span>Gels en réserve</span></div>
       </div>
+      <div class="badges-row" id="badgesRow">
+        <div class="badge" data-d="7"><span class="ic">🎖️</span><span class="lb">J7</span></div>
+        <div class="badge" data-d="14"><span class="ic">💪</span><span class="lb">J14</span></div>
+        <div class="badge" data-d="21"><span class="ic">🧠</span><span class="lb">J21</span></div>
+        <div class="badge" data-d="30"><span class="ic">🏆</span><span class="lb">J30</span></div>
+      </div>
     </div>
 
     <div class="card xsell" id="xsell">
@@ -264,8 +281,22 @@
 
     <label class="lbl hide" style="margin-top:18px" id="proLbl">Discipline 30 Pro <span class="pro-badge">SANS PUB</span></label>
     <div id="proBox" class="hide">
-      <p class="muted" style="font-size:13px;margin:0 0 8px">Supprime les pubs + <strong>gèle-série illimité</strong> pour protéger ta série sans regarder de pub. Un seul paiement, à vie.</p>
-      <button class="btn btn--amber btn--sm" id="btnPro" style="width:auto">✨ Passer Pro</button>
+      <p class="muted" style="font-size:13px;margin:0 0 8px">Supprime les pubs + <strong>gèle-série illimité</strong> + <strong>stats avancées</strong>. Un seul paiement de <strong>4,99&nbsp;€</strong>, à vie.</p>
+      <button class="btn btn--amber btn--sm" id="btnPro" style="width:auto">✨ Passer Pro — 4,99 €</button>
+    </div>
+
+    <div id="advStatsBox" class="hide">
+      <label class="lbl" style="margin-top:18px">Stats avancées</label>
+      <div id="advStatsLocked" class="locked-row hide">
+        <span>🔒 Historique de tous tes défis, meilleure série all-time, total de jours validés.</span>
+        <span class="pro-badge">PRO</span>
+      </div>
+      <div id="advStatsUnlocked" class="adv-stats hide">
+        <div class="stat"><b id="advChallenges">0</b><span>Défis lancés</span></div>
+        <div class="stat"><b id="advCompleted">0</b><span>Défis complétés</span></div>
+        <div class="stat"><b id="advBest">0</b><span>Meilleure série all-time</span></div>
+        <div class="stat"><b id="advTotalDays">0</b><span>Jours validés (total)</span></div>
+      </div>
     </div>
 
     <label class="lbl" style="margin-top:18px">Défi en cours</label>
@@ -348,6 +379,29 @@
     return best;
   }
 
+  /* ---- historique des défis + stats avancées (Pro) ---- */
+  var HKEY='fl_discipline30_history_v1';
+  function loadHistory(){ try{return JSON.parse(localStorage.getItem(HKEY))||[];}catch(e){return [];} }
+  function saveHistory(h){ localStorage.setItem(HKEY,JSON.stringify(h)); }
+  function pushHistoryIfAny(){ // archive le défi en cours avant remplacement/abandon (si au moins 1 jour validé)
+    if(!state || doneCount()===0) return;
+    var h=loadHistory();
+    h.push({ name:state.name, emo:state.emo, dur:state.dur, start:state.start, end:todayISO(),
+      doneCount:doneCount(), bestStreak:computeBestStreak(), completed:doneCount()>=state.dur });
+    if(h.length>200) h=h.slice(h.length-200); // garde-fou anti-croissance infinie du localStorage
+    saveHistory(h);
+  }
+  function computeAdvancedStats(){
+    var h=loadHistory();
+    var challenges=h.length+(state?1:0);
+    var completed=h.filter(function(x){return x.completed;}).length+((state&&doneCount()>=state.dur)?1:0);
+    var best=0; h.forEach(function(x){ if((x.bestStreak||0)>best) best=x.bestStreak; });
+    if(state){ var cb=computeBestStreak(); if(cb>best) best=cb; }
+    var totalDays=0; h.forEach(function(x){ totalDays+=x.doneCount||0; });
+    if(state) totalDays+=doneCount();
+    return { challenges:challenges, completed:completed, best:best, totalDays:totalDays };
+  }
+
   /* ---- views ---- */
   var $=function(id){return document.getElementById(id);};
   function show(view){
@@ -403,6 +457,11 @@
     buildCal();
     renderStats();
     updateFreezeBtn();
+    renderBadges(dc);
+  }
+  function renderBadges(dc){ // badges de progression persistants J7/J14/J21/J30
+    var row=$('badgesRow'); if(!row) return;
+    [].forEach.call(row.children,function(b){ b.classList.toggle('unlocked', dc>=(+b.dataset.d)); });
   }
   function renderStats(){ // stats visuelles : taux de réussite + meilleure série + gels
     if(!state) return;
@@ -494,12 +553,14 @@
   /* ---- new / reset ---- */
   $('btnNew').addEventListener('click',function(){
     if(state && doneCount()>0 && !confirm('Démarrer un nouveau défi remplace celui en cours. Continuer ?'))return;
+    pushHistoryIfAny();
     state=null; save(); localStorage.removeItem(KEY); pick={emo:'🎯',name:'',dur:30};
     show('onboarding'); buildTemplates(); $('durSeg').children[1].click&&0;
     try{showInterstitial();}catch(e){}   // pub à un moment naturel (rare), jamais pendant le check quotidien
   });
   $('btnReset').addEventListener('click',function(){
     if(!confirm('Abandonner le défi en cours et tout remettre à zéro ?'))return;
+    pushHistoryIfAny();
     localStorage.removeItem(KEY); state=null; closeModals(); show('onboarding'); buildTemplates();
   });
 
@@ -510,7 +571,7 @@
   /* ---- modals ---- */
   function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); $('mileModal').classList.remove('show'); }
   document.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')||e.target.classList.contains('modal')) closeModals(); });
-  $('btnSettings').addEventListener('click',function(){ syncRemUI(); $('setModal').classList.add('show'); });
+  $('btnSettings').addEventListener('click',function(){ syncRemUI(); showProUI(); $('setModal').classList.add('show'); });
 
   /* ---- share card (Canvas 1080x1920) ---- */
   function openShare(){ drawCard(); $('shareModal').classList.add('show'); }
@@ -658,10 +719,22 @@
   function showProUI(){
     if(!isNative) return;   // Pro = uniquement sur l'app native (le web reste le funnel boutique gratuit)
     $('proLbl').classList.remove('hide');
-    if(isPro()){ $('proBox').classList.add('hide'); $('proLbl').innerHTML='Discipline 30 Pro <span class="pro-badge">ACTIF ✓</span>'; }
-    else $('proBox').classList.remove('hide');
+    $('advStatsBox').classList.remove('hide');
+    if(isPro()){
+      $('proBox').classList.add('hide'); $('proLbl').innerHTML='Discipline 30 Pro <span class="pro-badge">ACTIF ✓</span>';
+      $('advStatsLocked').classList.add('hide'); $('advStatsUnlocked').classList.remove('hide');
+      var s=computeAdvancedStats();
+      $('advChallenges').textContent=s.challenges;
+      $('advCompleted').textContent=s.completed;
+      $('advBest').textContent=s.best;
+      $('advTotalDays').textContent=s.totalDays;
+    } else {
+      $('proBox').classList.remove('hide');
+      $('advStatsUnlocked').classList.add('hide'); $('advStatsLocked').classList.remove('hide');
+    }
   }
   (function(){ var pb=$('btnPro'); if(pb) pb.addEventListener('click',buyPremium); })();
+  (function(){ var lr=$('advStatsLocked'); if(lr) lr.addEventListener('click',buyPremium); })();
 
   /* ---- Gèle-série (streak freeze) ---- */
   function dayIndexOf(iso){ return Math.round((new Date(iso)-new Date(state.start))/86400000); }
