@@ -123,8 +123,44 @@ function renderCartPage() {
     </div>
   `).join('');
   const subtotal = cartTotal();
+  // BOS 13/07/2026 — La remise -10% annoncée par le bandeau n'était PAS appliquée sur FocusLab
+  // (le client payait le plein tarif). Elle l'est désormais, comme sur les autres boutiques.
+  // Source de vérité du calcul : window.BOS_PROMO.discount() (bos-promo.js) → même montant
+  // que celui envoyé à PayPal et à Stripe.
+  const discount = cartDiscount(cart);
+  const total = Math.round((subtotal - discount) * 100) / 100;
+
   document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
-  document.getElementById('cart-total') && (document.getElementById('cart-total').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
+
+  const promoRow = document.getElementById('cart-promo-row');
+  const promoEl  = document.getElementById('cart-discount');
+  if (promoRow && promoEl) {
+    promoRow.style.display = discount > 0 ? 'flex' : 'none';
+    promoEl.textContent = '-' + discount.toFixed(2).replace('.', ',') + ' €';
+  }
+
+  const totalEl = document.getElementById('cart-total');
+  if (totalEl) {
+    if (discount > 0) {
+      totalEl.innerHTML = '<span style="text-decoration:line-through;color:#9ca3af;font-size:.9em;margin-right:8px">' +
+        subtotal.toFixed(2).replace('.', ',') + ' €</span><span style="color:#10b981">' +
+        total.toFixed(2).replace('.', ',') + ' €</span>';
+    } else {
+      totalEl.textContent = total.toFixed(2).replace('.', ',') + ' €';
+    }
+  }
+}
+
+// -10% sur le produit le plus cher du panier (arrondi au centime).
+// Identique à bos-promo.js / bos-paypal.js / bos-stripe.js : un seul et même montant partout.
+function cartDiscount(cart) {
+  if (window.BOS_PROMO && typeof window.BOS_PROMO.discount === 'function') {
+    return window.BOS_PROMO.discount(cart);
+  }
+  if (!cart || !cart.length) return 0;
+  let max = 0;
+  cart.forEach(i => { const p = Number(i.price) || 0; if (p > max) max = p; });
+  return max > 0 ? Math.round(max * 10) / 100 : 0;
 }
 
 function getProductEmoji(id) {
