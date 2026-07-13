@@ -150,7 +150,7 @@
           </ul>
         </div>
 
-        <p class="cta-micro-note">Paiement 100% sécurisé par PayPal — carte bancaire acceptée. <strong>Livraison offerte</strong>, satisfait ou remboursé — retour sous 14 jours.</p>
+        <p class="cta-micro-note">Paiement 100% sécurisé par carte bancaire. <strong>Livraison offerte</strong>, satisfait ou remboursé — retour sous 14 jours.</p>
         <div class="product-ctas">
           <button class="btn btn--secondary btn--sm"
             id="add-to-cart-btn"
@@ -160,6 +160,12 @@
             data-img-class="img-lamp">
             Ajouter au panier
           </button>
+          <div class="checkout-stripe">
+            <button type="button" data-bos-cb data-bos-price="75" data-bos-key="lampe-led-focus"
+              onclick="bosProductCB(this)" style="display:block;width:100%;max-width:420px;margin:12px auto 0;padding:14px 24px;background:#635BFF;color:#fff;border:none;border-radius:8px;font-weight:600;font-size:16px;cursor:pointer;text-align:center;">
+              💳 Acheter maintenant par carte — 75 €
+            </button>
+          </div>
           <a href="panier.html" class="btn btn--secondary btn--sm">Voir le panier</a>
         </div>
 
@@ -167,7 +173,7 @@
 
         <div style="margin-top:1.25rem;background:var(--blue-pale);border-radius:var(--r);padding:1rem;">
           <p style="font-size:.83rem;color:var(--blue);font-weight:600;margin-bottom:.25rem">Achat rapide et sécurisé</p>
-          <p style="font-size:.8rem;color:var(--text-light);margin:0">Paiement géré par PayPal — carte bancaire acceptée, aucun compte PayPal requis. Livraison offerte, livraison estimée 12 à 20 jours ouvrés.</p>
+          <p style="font-size:.8rem;color:var(--text-light);margin:0">Paiement géré par carte bancaire, aucun compte à créer. Livraison offerte, livraison estimée 12 à 20 jours ouvrés.</p>
         </div>
 
         <div class="bos-kit-included" style="margin-top:1rem;background:var(--bg-light);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.1rem">
@@ -196,8 +202,8 @@
           <div class="feature-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
           </div>
-          <h3>Paiement sécurisé via PayPal</h3>
-          <p>Vos coordonnées bancaires ne nous sont jamais transmises. Carte acceptée, aucun compte PayPal requis.</p>
+          <h3>Paiement sécurisé par carte bancaire</h3>
+          <p>Vos coordonnées bancaires ne nous sont jamais transmises. Carte acceptée, aucun compte à créer.</p>
         </div>
         <div class="feature-card">
           <div class="feature-icon">
@@ -238,7 +244,7 @@
         </details>
         <details style="background:#fff;border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.25rem">
           <summary style="cursor:pointer;font-weight:600;color:var(--text)">Le paiement est-il sécurisé ?</summary>
-          <p style="margin-top:.6rem;color:var(--text-light);font-size:.9rem;line-height:1.6">Oui, paiement 100% sécurisé via PayPal — carte bancaire acceptée sans compte PayPal requis. Vos coordonnées bancaires ne sont jamais transmises à FocusLab.</p>
+          <p style="margin-top:.6rem;color:var(--text-light);font-size:.9rem;line-height:1.6">Oui, paiement 100% sécurisé par carte bancaire sans créer de compte. Vos coordonnées bancaires ne sont jamais transmises à FocusLab.</p>
         </details>
       </div>
     </section>
@@ -283,7 +289,7 @@
   <div class="container">
     <div class="cta-banner">
       <h2>Reste informé(e) de nos nouveautés</h2>
-      <p>La commande est ouverte dès maintenant, paiement sécurisé par PayPal ! Inscris-toi aussi à notre liste : tu seras prévenu(e) <strong style="color:#fff">en avant-première de nos prochains produits</strong>.</p>
+      <p>La commande est ouverte dès maintenant, paiement sécurisé par carte bancaire ! Inscris-toi aussi à notre liste : tu seras prévenu(e) <strong style="color:#fff">en avant-première de nos prochains produits</strong>.</p>
       <form action="https://api.web3forms.com/submit" method="POST" class="w3-email-form cta-form">
         <input type="hidden" name="access_key" value="d97a8c73-b827-48bb-b437-e053a73fdb7e">
         <input type="hidden" name="subject" value="FocusLab nouveau lead">
@@ -343,8 +349,6 @@
 </footer>
 
 <script src="cart.js"></script>
-<script src="bos-paypal.js"></script>
-
 <!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end --><script>
 // Miniatures cliquables
 (function(){
@@ -371,5 +375,6 @@
 <script src="bos-trust.js" defer></script>
 <script src="reviews-data.js" defer></script>
 <script src="bos-reviews.js" defer></script>
+<script src="bos-stripe.js"></script>
 </body>
 </html>

@@ -129,6 +129,8 @@ function renderCartPage() {
   // que celui envoyé à PayPal et à Stripe.
   const discount = cartDiscount(cart);
   const total = Math.round((subtotal - discount) * 100) / 100;
+  // BOS 13/07/2026 — le checkout CB (bos-stripe.js) facture EXACTEMENT ce total affiche.
+  window.bosCartTotal = function(){ return total; };
 
   document.getElementById('cart-subtotal') && (document.getElementById('cart-subtotal').textContent = subtotal.toFixed(2).replace('.',',') + ' €');
 

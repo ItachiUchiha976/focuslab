@@ -95,18 +95,18 @@
         </div>
 
         <div class="cart-checkout-note">
-          Paiement 100% sécurisé par PayPal — carte bancaire acceptée (pas besoin de compte PayPal). Livraison offerte · Satisfait ou remboursé — retour sous 14 jours.
+          Paiement 100% sécurisé par carte bancaire. Livraison offerte · Satisfait ou remboursé — retour sous 14 jours.
         </div>
 
-        <!-- Checkout PayPal -->
+        <!-- Checkout carte bancaire (Stripe) -->
         <div class="checkout-stub">
           <h3>Finaliser ma commande</h3>
-          <p>Clique sur le bouton ci-dessous pour régler ta commande en toute sécurité via PayPal.</p>
+          <p>Clique sur le bouton ci-dessous pour régler ta commande par carte bancaire, en toute sécurité.</p>
           <label class="form-consent" style="margin-bottom:1rem">
             <input type="checkbox" id="cgv-check"><span>J'ai lu et j'accepte les <a href="cgv.html" target="_blank" rel="noopener">CGV et mentions légales</a>.</span>
           </label>
-          <button type="button" class="btn btn--primary btn--full btn-checkout" onclick="bosPayPalCheckout()">Payer par PayPal</button>
-          <p class="form-note" style="margin-top:.85rem">Tu seras redirigé(e) vers une page PayPal sécurisée. La carte bancaire est acceptée, aucun compte PayPal n'est requis.</p>
+          <button type="button" class="btn btn--primary btn--full btn-checkout" data-bos-cb onclick="bosCartCB(this)">💳 Payer par carte bancaire</button>
+          <p class="form-note" style="margin-top:.85rem">Tu seras redirigé(e) vers notre page de paiement sécurisée (Stripe). Le montant débité est exactement le total affiché ci-dessus.</p>
         </div>
 
         <!-- Newsletter productivité -->
@@ -170,8 +170,6 @@
 </footer>
 
 <script src="cart.js"></script>
-<script src="bos-paypal.js"></script>
-
 <!-- umami-start --><script defer src="https://cloud.umami.is/script.js" data-website-id="d0fa94fe-a108-4590-a465-8f0017569370"></script><!-- umami-end -->
 <script src="bos-stripe.js"></script>
 
