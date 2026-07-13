@@ -1,5 +1,5 @@
 /* Discipline 30 — FocusLab · service worker (network-first, cache = secours hors-ligne) */
-var CACHE = 'discipline30-v4';
+var CACHE = 'discipline30-v5';
 var ASSETS = [
   './',
   './index.html',

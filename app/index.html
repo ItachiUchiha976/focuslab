@@ -134,6 +134,12 @@
   .freeze-btn{flex:1;background:linear-gradient(180deg,#39507f,#283c66);border:1px solid var(--line);color:var(--text);border-radius:12px;padding:11px 12px;font-weight:700;font-size:14px;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:6px}
   .freeze-btn.urgent{background:linear-gradient(180deg,#f7c26b,#f4a637);color:#20160a;border-color:transparent}
   .pro-badge{display:inline-block;background:linear-gradient(180deg,#f7c26b,#f4a637);color:#20160a;border-radius:999px;padding:3px 10px;font-size:11px;font-weight:800;letter-spacing:.4px}
+  /* Cadeau du jour (récompense quotidienne) */
+  .dot-badge{position:absolute;top:6px;right:6px;width:10px;height:10px;border-radius:50%;background:#e85d75;border:2px solid var(--bg);display:none}
+  .dot-badge.show{display:block}
+  .gift-sheet .big{font-size:52px;line-height:1;margin:4px 0 12px}
+  .gift-quote{font-style:italic;color:var(--text);font-size:16px;line-height:1.5;background:var(--panel2);border:1px solid var(--line);border-radius:14px;padding:16px 18px;margin:0 0 14px}
+  .gift-quote cite{display:block;margin-top:8px;font-style:normal;font-size:12px;color:var(--muted);font-weight:700}
 </style>
 <script src="bos-promo.js"></script>
 </head>
@@ -141,7 +147,10 @@
 <div class="wrap">
   <header class="app">
     <div class="brand">Focus<em>Lab</em><small>DISCIPLINE&nbsp;30</small></div>
-    <button class="ico-btn" id="btnSettings" aria-label="Réglages" title="Réglages">⚙️</button>
+    <div class="row" style="gap:8px">
+      <button class="ico-btn" id="btnGift" aria-label="Cadeau du jour" title="Cadeau du jour" style="position:relative">🎁<span class="dot-badge" id="giftDot"></span></button>
+      <button class="ico-btn" id="btnSettings" aria-label="Réglages" title="Réglages">⚙️</button>
+    </div>
   </header>
 
   <!-- ONBOARDING -->
@@ -301,7 +310,7 @@
 
     <label class="lbl" style="margin-top:18px">Défi en cours</label>
     <button class="btn btn--ghost btn--sm" id="btnReset" style="width:auto">Abandonner & recommencer</button>
-    <p class="muted" style="font-size:12px;margin-top:14px">Version 1.1 · <a href="../index.html">focuslabboutique.fr</a></p>
+    <p class="muted" style="font-size:12px;margin-top:14px">Version 1.3 · <a href="../index.html">focuslabboutique.fr</a></p>
   </div>
 </div>
 
@@ -314,6 +323,17 @@
     <p id="mileMsg"></p>
     <button class="btn btn--amber" id="btnMileShare" style="margin-bottom:8px">📸 Partager ma carte</button>
     <button class="btn btn--ghost btn--sm" data-close>Je continue 💪</button>
+  </div>
+</div>
+
+<!-- CADEAU DU JOUR MODAL (récompense quotidienne) -->
+<div class="modal" id="giftModal">
+  <div class="sheet gift-sheet" style="text-align:center">
+    <button class="close-x" data-close>×</button>
+    <div class="big" id="giftEmo">🎁</div>
+    <h2 id="giftTitle">Cadeau du jour</h2>
+    <blockquote class="gift-quote" id="giftQuote"></blockquote>
+    <button class="btn btn--amber" data-close>Merci, j'y retourne 💪</button>
   </div>
 </div>
 
@@ -527,6 +547,38 @@
   }
   $('btnMileShare').addEventListener('click',function(){ $('mileModal').classList.remove('show'); openShare(); });
 
+  /* ---- Cadeau du jour (récompense quotidienne — distincte de la validation d'habitude) ---- */
+  var GIFT_KEY='fl_gift_last';
+  var GIFT_QUOTES=[
+    {q:'La motivation te fait démarrer. L\'habitude te fait continuer.',a:'Jim Ryun'},
+    {q:'On ne s\'élève pas au niveau de ses objectifs, on tombe au niveau de ses systèmes.',a:'James Clear'},
+    {q:'Chaque action est un vote pour le type de personne que tu veux devenir.',a:'James Clear'},
+    {q:'La discipline, c\'est se souvenir de ce que tu veux vraiment.',a:'David Campbell'},
+    {q:'Les habitudes-clés déclenchent des réactions en chaîne qui transforment tout le reste.',a:'Charles Duhigg'},
+    {q:'Tu as environ 4 000 semaines à vivre. Fais qu\'elles comptent, une à la fois.',a:'Oliver Burkeman'},
+    {q:'Un jour de plus tenu, c\'est un jour de moins à recommencer.',a:'Discipline 30'},
+    {q:'La régularité bat l\'intensité. Toujours.',a:'Discipline 30'},
+    {q:'Rends le bon comportement facile, le mauvais difficile.',a:'BJ Fogg'},
+    {q:'Le plancher des mauvais jours, c\'est ce qui sauve la série des bons jours.',a:'Discipline 30'},
+    {q:'Prépare un plan « si… alors » : tu doubles tes chances de tenir.',a:'Peter Gollwitzer'},
+    {q:'21 jours ne suffisent pas toujours — et ce n\'est pas grave. Continue.',a:'Lally et al., 2010'},
+    {q:'Le meilleur moment pour commencer, c\'était hier. Le second, c\'est maintenant.',a:'Discipline 30'},
+    {q:'Une série qui tient, c\'est une preuve — pas une pression.',a:'Discipline 30'},
+    {q:'Associe la nouvelle habitude à une existante : l\'empilement fonctionne.',a:'BJ Fogg'}
+  ];
+  function giftClaimedToday(){ return localStorage.getItem(GIFT_KEY)===todayISO(); }
+  function updateGiftBadge(){ var d=$('giftDot'); if(d) d.classList.toggle('show', !giftClaimedToday()); }
+  $('btnGift').addEventListener('click',function(){
+    if(giftClaimedToday()){ toast('🎁 Prochain cadeau demain — reviens demain !'); return; }
+    var pick=GIFT_QUOTES[Math.floor(Math.random()*GIFT_QUOTES.length)];
+    $('giftQuote').innerHTML=pick.q+'<cite>— '+pick.a+'</cite>';
+    localStorage.setItem(GIFT_KEY,todayISO());
+    updateGiftBadge();
+    $('giftModal').classList.add('show');
+    confetti(60);
+    try{ if(navigator.vibrate) navigator.vibrate(25); }catch(e){}
+  });
+
   /* ---- check today ---- */
   $('btnCheck').addEventListener('click',function(){
     if(!state)return; var t=todayISO();
@@ -569,7 +621,7 @@
   function toast(m){ var el=$('toast'); el.textContent=m; el.classList.add('show'); clearTimeout(toT); toT=setTimeout(function(){el.classList.remove('show');},2200); }
 
   /* ---- modals ---- */
-  function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); $('mileModal').classList.remove('show'); }
+  function closeModals(){ $('shareModal').classList.remove('show'); $('setModal').classList.remove('show'); $('mileModal').classList.remove('show'); $('giftModal').classList.remove('show'); }
   document.addEventListener('click',function(e){ if(e.target.hasAttribute('data-close')||e.target.classList.contains('modal')) closeModals(); });
   $('btnSettings').addEventListener('click',function(){ syncRemUI(); showProUI(); $('setModal').classList.add('show'); });
 
@@ -816,11 +868,11 @@
   }
   if(state) show('home'); else { show('onboarding'); buildTemplates(); }
   maybeAutoFreeze();
-  render(); checkReminder();
+  render(); checkReminder(); updateGiftBadge();
   admobInit();
   scheduleNativeReminder();
   setInterval(checkReminder, 60000); // rappel local : vérifié chaque minute quand l'app est ouverte
-  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ maybeAutoFreeze(); render(); checkReminder(); }});
+  document.addEventListener('visibilitychange',function(){ if(!document.hidden){ maybeAutoFreeze(); render(); checkReminder(); updateGiftBadge(); }});
 
   /* ---- PWA service worker ---- */
   if('serviceWorker' in navigator){ navigator.serviceWorker.register('sw.js').catch(function(){}); }
