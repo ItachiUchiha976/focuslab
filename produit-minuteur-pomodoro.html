@@ -68,6 +68,24 @@
       <!-- Image -->
       <div style="display:flex;flex-direction:column">
           <div class="product-page__img-wrap img-timer">
+        <style>
+.bos-anim-timer{position:absolute;top:12px;right:12px;width:82px;height:82px;pointer-events:none;z-index:2;overflow:hidden}
+.bos-anim-timer svg{width:100%;height:100%;display:block}
+.bos-anim-timer .needle{animation:bosTimerTick 6s steps(12) infinite;transform-box:fill-box;transform-origin:50% 100%}
+@keyframes bosTimerTick{to{transform:rotate(360deg)}}
+.bos-anim-timer .face{animation:bosTimerPulse 6s ease-in-out infinite}
+@keyframes bosTimerPulse{0%,92%,100%{opacity:1}96%{opacity:.6}}
+@media (prefers-reduced-motion: reduce){.bos-anim-timer .needle{animation:none}}
+</style>
+<div class="bos-anim-produit bos-anim-timer" aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <circle class="face" cx="50" cy="50" r="32" fill="#fde68a" stroke="#dc4c3e" stroke-width="3"/>
+    <rect x="46" y="14" width="8" height="8" rx="2" fill="#3f6b4f"/>
+    <rect class="needle" x="48" y="24" width="4" height="26" rx="2" fill="#dc4c3e"/>
+    <circle cx="50" cy="50" r="3.5" fill="#1e293b"/>
+  </svg>
+</div>
+
         <img id="main-product-img" src="img/minuteur-pomodoro-focuslab.jpg" alt="Minuteur Flip Pomodoro FocusLab, cube blanc affichant 25 et 30 minutes" loading="lazy">
                 </div>
 <div class="thumbnails" style="margin-top:.75rem;display:flex;flex-wrap:wrap;gap:8px">

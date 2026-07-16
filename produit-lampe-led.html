@@ -68,6 +68,26 @@
       <!-- Image -->
       <div style="display:flex;flex-direction:column">
           <div class="product-page__img-wrap img-lamp">
+        <style>
+.bos-anim-sunrise{position:absolute;top:12px;right:12px;width:88px;height:88px;pointer-events:none;z-index:2;overflow:hidden}
+.bos-anim-sunrise svg{width:100%;height:100%;display:block}
+.bos-anim-sunrise .sun{animation:bosSunriseRise 6s ease-in-out infinite}
+@keyframes bosSunriseRise{0%{transform:translateY(18px);opacity:.2}50%{transform:translateY(-6px);opacity:1}100%{transform:translateY(18px);opacity:.2}}
+.bos-anim-sunrise .glow{animation:bosSunriseGlow 6s ease-in-out infinite}
+@keyframes bosSunriseGlow{0%,100%{opacity:.15}50%{opacity:.55}}
+@media (prefers-reduced-motion: reduce){.bos-anim-sunrise .sun,.bos-anim-sunrise .glow{animation:none;opacity:.6}}
+</style>
+<div class="bos-anim-produit bos-anim-sunrise" aria-hidden="true">
+  <svg viewBox="0 0 100 100">
+    <clipPath id="sunClip"><rect x="10" y="10" width="80" height="52"/></clipPath>
+    <g clip-path="url(#sunClip)">
+      <circle class="glow" cx="50" cy="62" r="30" fill="#f59e0b"/>
+      <circle class="sun" cx="50" cy="62" r="17" fill="#fbbf24"/>
+    </g>
+    <line x1="12" y1="62" x2="88" y2="62" stroke="#1e293b" stroke-width="3"/>
+  </svg>
+</div>
+
         <img id="main-product-img" src="img/lampe-led-focuslab.jpg" alt="Lampe LED 3-en-1 FocusLab allumée sur un bureau, avec base chargeur sans fil" loading="lazy">
                 </div>
 <div class="thumbnails" style="margin-top:.75rem;display:flex;flex-wrap:wrap;gap:8px">

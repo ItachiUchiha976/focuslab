@@ -73,6 +73,24 @@
 
       <!-- Visuel produit -->
       <div class="product-page__img-wrap">
+        <style>
+.bos-anim-drawer{position:absolute;top:12px;right:12px;width:96px;height:74px;pointer-events:none;z-index:2;overflow:hidden}
+.bos-anim-drawer svg{width:100%;height:100%;display:block}
+.bos-anim-drawer .tray{animation:bosDrawerSlide 4.5s ease-in-out infinite}
+@keyframes bosDrawerSlide{0%,15%{transform:translateX(0)}50%,65%{transform:translateX(22px)}100%{transform:translateX(0)}}
+@media (prefers-reduced-motion: reduce){.bos-anim-drawer .tray{animation:none}}
+</style>
+<div class="bos-anim-produit bos-anim-drawer" aria-hidden="true">
+  <svg viewBox="0 0 100 74">
+    <rect x="8" y="10" width="84" height="14" fill="#1e293b" opacity=".6"/>
+    <rect x="8" y="50" width="84" height="8" rx="2" fill="#1e293b"/>
+    <g class="tray">
+      <rect x="14" y="30" width="56" height="16" rx="3" fill="#f59e0b"/>
+      <rect x="18" y="35" width="16" height="4" rx="2" fill="#1e293b" opacity=".6"/>
+    </g>
+  </svg>
+</div>
+
         <img id="main-product-img" src="img/tiroir-invisible-focuslab.jpg" alt="Tiroir Invisible sous Bureau FocusLab &#8212; fixation adh&#233;sive 3M, ABS mat, coulisse silencieuse" loading="eager" style="width:100%;height:auto;display:block">
       </div>
 

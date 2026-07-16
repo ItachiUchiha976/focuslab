@@ -73,6 +73,22 @@
 
       <!-- Visuel produit -->
       <div class="product-page__img-wrap">
+        <style>
+.bos-anim-cable{position:absolute;top:12px;right:12px;width:92px;height:78px;pointer-events:none;z-index:2;overflow:hidden}
+.bos-anim-cable svg{width:100%;height:100%;display:block}
+.bos-anim-cable .wire{stroke-dasharray:120;animation:bosCableCoil 5s ease-in-out infinite}
+@keyframes bosCableCoil{0%{stroke-dashoffset:120}50%{stroke-dashoffset:0}100%{stroke-dashoffset:120}}
+.bos-anim-cable .clip{animation:bosCableClip 5s ease-in-out infinite}
+@keyframes bosCableClip{0%,100%{opacity:.5}50%{opacity:1}}
+@media (prefers-reduced-motion: reduce){.bos-anim-cable .wire{animation:none;stroke-dashoffset:0}.bos-anim-cable .clip{animation:none;opacity:.8}}
+</style>
+<div class="bos-anim-produit bos-anim-cable" aria-hidden="true">
+  <svg viewBox="0 0 100 84">
+    <path class="wire" d="M8,20 C30,10 30,50 50,42 C70,34 70,68 92,58" fill="none" stroke="#f59e0b" stroke-width="4" stroke-linecap="round"/>
+    <rect class="clip" x="42" y="30" width="16" height="24" rx="4" fill="#1e293b"/>
+  </svg>
+</div>
+
         <img id="main-product-img" src="img/organiseur-cables-focuslab.jpg" alt="Organiseur de c&#226;bles magn&#233;tique FocusLab &#8212; 5 slots aimant&#233;s, aluminium bross&#233;" loading="eager" style="width:100%;height:auto;display:block">
       </div>
 
