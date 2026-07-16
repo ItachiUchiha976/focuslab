@@ -1,0 +1,159 @@
+/* ============================================================
+   BOS MODERN LAYER — FocusLab — 16/07/2026
+   Couche ADDITIVE de modernisation (hero vivant, boutons premium,
+   cartes produit profondes, reveal au scroll). Ne remplace aucune
+   regle de base : uniquement des enrichissements visuels.
+   Adaptee des tokens FocusLab (--amber, --blue, --dark).
+   Portee depuis curiosa/bos-modern.css (commit e220d76).
+   Respecte prefers-reduced-motion.
+   ============================================================ */
+
+/* ---------- 1. HERO VIVANT ---------- */
+/* Halo lumineux anime derriere le visuel produit (.hero-visual, fond degrade dej present) */
+.hero-visual { position: relative; }
+.hero-visual::before {
+  content: '';
+  position: absolute; inset: -14%;
+  background: radial-gradient(circle at 50% 45%,
+     rgba(245,158,11,.38) 0%,
+     rgba(217,119,6,.20) 34%,
+     transparent 68%);
+  filter: blur(8px);
+  z-index: 0;
+  animation: bosGlow 6s ease-in-out infinite;
+  pointer-events: none;
+}
+.hero-visual img { position: relative; z-index: 1; animation: bosFloat 7s ease-in-out infinite; will-change: transform; }
+
+@keyframes bosGlow {
+  0%,100% { opacity: .7;  transform: scale(1); }
+  50%     { opacity: 1;   transform: scale(1.07); }
+}
+@keyframes bosFloat {
+  0%,100% { transform: translateY(0)     rotate(-.6deg); }
+  50%     { transform: translateY(-14px) rotate(.6deg); }
+}
+
+/* Champ d'etoiles discret dans le hero sombre (degrade navy #0f172a -> #1e3a8a) */
+.hero { position: relative; }
+.hero::after {
+  content: '';
+  position: absolute; inset: 0; z-index: 0; pointer-events: none;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, rgba(255,255,255,.85), transparent),
+    radial-gradient(1.2px 1.2px at 28% 68%, rgba(255,255,255,.5),  transparent),
+    radial-gradient(1.7px 1.7px at 62% 30%, rgba(255,255,255,.7),  transparent),
+    radial-gradient(1.1px 1.1px at 82% 58%, rgba(255,255,255,.45), transparent),
+    radial-gradient(1.3px 1.3px at 46% 82%, rgba(255,255,255,.55), transparent),
+    radial-gradient(1.2px 1.2px at 90% 16%, rgba(255,255,255,.5),  transparent),
+    radial-gradient(1.0px 1.0px at 8%  54%, rgba(255,255,255,.45), transparent);
+  animation: bosTwinkle 5s ease-in-out infinite alternate;
+}
+@keyframes bosTwinkle { from { opacity: .25; } to { opacity: .9; } }
+.hero-grid { position: relative; z-index: 2; }
+
+/* Titre : reflet ambre anime sur le mot cle en italique (remplace la couleur pleine --amber) */
+.hero-title em {
+  background: linear-gradient(100deg, #FCD34D 0%, #FEF3C7 28%, #D97706 52%, #FEF3C7 78%, #FCD34D 100%);
+  background-size: 220% auto;
+  -webkit-background-clip: text; background-clip: text;
+  -webkit-text-fill-color: transparent; color: transparent;
+  animation: bosShine 6.5s linear infinite;
+}
+@keyframes bosShine { to { background-position: 220% center; } }
+
+/* ---------- 2. BOUTONS PREMIUM ---------- */
+/* CTA principaux pleine-couleur : bouton hero + "Ajouter au panier" produit */
+.btn--amber,
+.add-to-cart-btn, #add-to-cart-btn {
+  position: relative; overflow: hidden;
+  transition: transform .2s, box-shadow .2s, background .2s, border-color .2s;
+}
+.btn--amber::after,
+.add-to-cart-btn::after, #add-to-cart-btn::after {
+  content: ''; position: absolute; top: 0; left: -120%;
+  width: 60%; height: 100%;
+  background: linear-gradient(120deg, transparent, rgba(255,255,255,.55), transparent);
+  transform: skewX(-18deg);
+  transition: left .6s ease;
+  pointer-events: none;
+}
+.btn--amber:hover::after,
+.add-to-cart-btn:hover::after, #add-to-cart-btn:hover::after { left: 135%; }
+
+/* Bouton "Voir le produit" en pied de carte */
+.product-card__footer .btn {
+  position: relative; overflow: hidden;
+  transition: background .2s, transform .2s, box-shadow .2s;
+}
+.product-card__footer .btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(245,158,11,.28); }
+
+/* ---------- 3. CARTES PRODUIT PREMIUM ---------- */
+.product-card { transition: transform .32s cubic-bezier(.2,.7,.2,1), box-shadow .32s; }
+.product-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 24px 50px rgba(15,23,42,.16), 0 4px 14px rgba(245,158,11,.16);
+}
+.product-card__img::after {
+  content: ''; position: absolute; inset: 0;
+  background: linear-gradient(to top, rgba(15,23,42,.28), transparent 55%);
+  opacity: 0; transition: opacity .3s; pointer-events: none;
+}
+.product-card:hover .product-card__img::after { opacity: 1; }
+
+/* ---------- 4. REVEAL AU SCROLL ---------- */
+[data-reveal] {
+  opacity: 0; transform: translateY(26px);
+  transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.2,1);
+}
+[data-reveal].is-in { opacity: 1; transform: none; }
+[data-reveal-delay="1"] { transition-delay: .08s; }
+[data-reveal-delay="2"] { transition-delay: .16s; }
+[data-reveal-delay="3"] { transition-delay: .24s; }
+
+/* ---------- 5bis. BARRE D'ACHAT STICKY MOBILE (fiches produit) ----------
+   Construite dynamiquement par bos-reveal.js a partir du bouton
+   #add-to-cart-btn de la page. Mobile uniquement ; apparait quand le CTA
+   principal sort de l'ecran. +8-15% de conversion (benchmark e-commerce). */
+.bos-sticky-atc {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 900;
+  display: flex; align-items: center; gap: .8rem;
+  padding: .6rem .9rem calc(.6rem + env(safe-area-inset-bottom, 0px));
+  background: rgba(15,23,42,.96);
+  border-top: 1px solid rgba(245,158,11,.25);
+  backdrop-filter: blur(8px);
+  transform: translateY(110%);
+  transition: transform .3s ease;
+}
+.bos-sticky-atc.is-visible { transform: translateY(0); }
+.bos-sticky-atc__meta { min-width: 0; }
+.bos-sticky-atc__price { color: var(--amber); font-weight: 800; font-size: 1.12rem; line-height: 1.1; white-space: nowrap; }
+.bos-sticky-atc__name {
+  color: #cbd5e1; font-size: .72rem; line-height: 1.25;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 38vw;
+}
+.bos-sticky-atc__btn {
+  flex: 1; border: none; cursor: pointer;
+  background: var(--amber); color: #fff;
+  font-weight: 700; font-size: .95rem; font-family: inherit;
+  padding: .8rem 1rem; border-radius: var(--r);
+  box-shadow: 0 6px 18px rgba(245,158,11,.3);
+  white-space: nowrap;
+}
+.bos-sticky-atc__btn:active { transform: scale(.98); }
+body.bos-atc-open { padding-bottom: 76px; }
+@media (min-width: 768px) {
+  .bos-sticky-atc { display: none; }
+  body.bos-atc-open { padding-bottom: 0; }
+}
+
+/* ---------- 5. ACCESSIBILITE : respect du mouvement reduit ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-visual img,
+  .hero-visual::before,
+  .hero::after,
+  .hero-title em,
+  .btn--amber::after,
+  .add-to-cart-btn::after, #add-to-cart-btn::after { animation: none !important; }
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none !important; }
+}
