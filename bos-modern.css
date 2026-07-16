@@ -170,3 +170,22 @@ body.bos-atc-open { padding-bottom: 76px; }
 
 /* Pastille retractation au-dessus de la barre sticky ATC (conflit visuel attrape 16/07) */
 body.bos-atc-open #bos-retract-link{ bottom: 88px; }
+
+/* Typo descriptions — 17/07 */
+/* Ame "deep-work chaleureux" : la description produit principale se distingue
+   du corps de texte (Inter) par une police plus douce (Work Sans) + un encart
+   ambre pale, distinct de .bos-kit-benefit (meme famille de couleurs, bordure
+   plus foncee --amber-dark au lieu de --amber, padding different) pour que
+   les deux blocs ne se confondent pas sur une meme fiche produit. */
+.product-page__desc {
+  font-family: 'Work Sans', var(--f-body);
+  font-weight: 400;
+  font-size: 1.03rem;
+  line-height: 1.7;
+  color: var(--text-med);
+  background: var(--amber-pale);
+  border-left: 3px solid var(--amber-dark);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  margin-bottom: 1.5rem;
+}
